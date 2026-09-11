@@ -1,20 +1,37 @@
 ---
+import { Image } from "astro:assets";
 import Container from "../shared/layout/Container.astro";
+import portrait from "../assets/profile/Image.png";
 ---
 
 <section class="hero" aria-labelledby="hero-title">
   <Container>
-    <div class="hero__content">
-      <p class="hero__role">Desarrollador Full Stack</p>
+    <div class="hero__layout">
+      <div class="hero__portrait">
+        <Image
+          src={portrait}
+          alt="Retrato de Miguel Ospina"
+          class="hero__image"
+          widths={[320, 640, portrait.width]}
+          sizes="(min-width: 48rem) 320px, (min-width: 20rem) 288px, calc(100vw - 2rem)"
+          format="webp"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
 
-      <h1 id="hero-title" class="hero__title">
-        Soy <span>Miguel Ospina</span>
-      </h1>
+      <div class="hero__content">
+        <p class="hero__role">Desarrollador Full Stack</p>
 
-      <p class="hero__description">
-        Desarrollo aplicaciones con Java, Spring Boot y tecnologías web.
-        Transformo ideas en soluciones que responden a necesidades reales.
-      </p>
+        <h1 id="hero-title" class="hero__title">
+          Soy <span>Miguel Ospina</span>
+        </h1>
+
+        <p class="hero__description">
+          Desarrollo aplicaciones con Java, Spring Boot y tecnologías web.
+          Transformo ideas en soluciones que responden a necesidades reales.
+        </p>
+      </div>
     </div>
   </Container>
 </section>
@@ -28,7 +45,27 @@ import Container from "../shared/layout/Container.astro";
     );
   }
 
+  .hero__layout {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .hero__portrait {
+    width: 100%;
+    max-width: 18rem;
+    justify-self: center;
+  }
+
+  .hero__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-medium);
+  }
+
   .hero__content {
+    min-width: 0;
     max-width: 44rem;
   }
 
@@ -39,9 +76,9 @@ import Container from "../shared/layout/Container.astro";
 
     border: 1px solid var(--color-border);
     border-radius: var(--radius-small);
-    font-family: var(--font-mono);
 
     color: var(--color-text-muted);
+    font-family: var(--font-mono);
     font-size: 0.875rem;
   }
 
@@ -64,5 +101,17 @@ import Container from "../shared/layout/Container.astro";
 
     color: var(--color-text-muted);
     font-size: 1.125rem;
+  }
+
+  @media (min-width: 48rem) {
+    .hero__layout {
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+      gap: var(--space-12);
+    }
+
+    .hero__portrait {
+      max-width: 20rem;
+      justify-self: start;
+    }
   }
 </style>
