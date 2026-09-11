@@ -1,0 +1,67 @@
+---
+import Container from "../shared/layout/Container.astro";
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <Container>
+    <div class="hero__content">
+      <p class="hero__role">Desarrollador Full Stack</p>
+
+      <h1 id="hero-title" class="hero__title">
+        Soy <span>Miguel Ospina</span>
+      </h1>
+
+      <p class="hero__description">
+        Desarrollo aplicaciones con Java, Spring Boot y tecnologías web.
+        Transformo ideas en soluciones que responden a necesidades reales.
+      </p>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(
+      var(--space-12),
+      8vw,
+      var(--space-16)
+    );
+  }
+
+  .hero__content {
+    max-width: 44rem;
+  }
+
+  .hero__role {
+    display: inline-block;
+    margin: 0 0 var(--space-6);
+    padding: var(--space-2) var(--space-4);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .hero__title {
+    margin: 0;
+
+    font-size: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .hero__title span {
+    color: var(--color-accent);
+  }
+
+  .hero__description {
+    max-width: 55ch;
+    margin: var(--space-6) 0 0;
+
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+  }
+</style>

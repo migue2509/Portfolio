@@ -1,0 +1,17 @@
+<div class="container">
+  <slot />
+</div>
+
+<style>
+  .container {
+    width: calc(100% - 2 * var(--space-4));
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+  }
+
+  @media (min-width: 48rem) {
+    .container {
+      width: calc(100% - 2 * var(--space-8));
+    }
+  }
+</style>
