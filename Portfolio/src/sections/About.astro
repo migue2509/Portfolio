@@ -1,0 +1,58 @@
+---
+import Container from "../shared/layout/Container.astro";
+import SectionHeading from "../shared/ui/SectionHeading.astro";
+---
+
+<section id="sobre-mi" class="about" aria-labelledby="about-title">
+  <Container>
+    <SectionHeading id="about-title" title="Sobre mí" />
+
+    <div class="about__panel">
+      <h3 class="about__title">Tu desarrollador</h3>
+
+      <p class="about__text">
+        Soy Miguel Ospina, desarrollador Full Stack en Medellín, Colombia.
+        Mi enfoque actual está en el backend: construir APIs y organizar
+        la lógica y los datos que hacen funcionar una aplicación.
+      </p>
+
+      <p class="about__text">
+        Me interesa entender el problema antes de programar. Trabajo con
+        mentalidad de crecimiento, comunicación en equipo y atención al
+        detalle para transformar ideas en soluciones útiles.
+      </p>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .about {
+    padding-block: var(--space-12);
+    scroll-margin-top: var(--space-8);
+  }
+
+  .about__panel {
+    padding: clamp(var(--space-6), 4vw, var(--space-12));
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-surface);
+  }
+
+  .about__title {
+    margin: 0 0 var(--space-4);
+
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    line-height: 1.3;
+  }
+
+  .about__text {
+    max-width: 65ch;
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .about__text + .about__text {
+    margin-top: var(--space-4);
+  }
+</style>
