@@ -1,0 +1,131 @@
+---
+const groups = [
+  {
+    title: "Mentalidad",
+    items: [
+      "Persistencia",
+      "Mentalidad de crecimiento",
+      "Responsabilidad personal",
+      "Orientación al futuro",
+    ],
+  },
+  {
+    title: "Habilidades de comportamiento",
+    items: [
+      "Comunicación",
+      "Productividad",
+      "Orientación al detalle",
+      "Trabajo en equipo",
+    ],
+  },
+];
+---
+
+<div class="about-details">
+  <div class="about-details__introduction">
+    <h3 class="about-details__title">Tu Desarrollador</h3>
+
+    <div class="about-details__description">
+      <p>
+        Soy desarrollador Full Stack apasionado por crear soluciones
+        eficientes, escalables y centradas en el usuario.
+      </p>
+
+      <p>
+        Transformo ideas en productos digitales que generan impacto
+        y resuelven problemas reales.
+      </p>
+    </div>
+  </div>
+
+  {
+    groups.map((group) => (
+      <div class="about-details__group">
+        <h4 class="about-details__subtitle">
+          <span aria-hidden="true">// </span>
+          {group.title}
+        </h4>
+
+        <ul class="about-details__tags" role="list">
+          {group.items.map((item) => (
+            <li class="about-details__tag">{item}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .about-details {
+    min-width: 0;
+    border: 1px solid var(--color-border);
+    background-color: rgb(9 9 11 / 85%);
+  }
+
+  .about-details__title {
+    margin: 0;
+    padding: var(--space-4);
+
+    background: linear-gradient(
+      110deg,
+      #27272a,
+      var(--color-surface)
+    );
+
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 1.4;
+  }
+
+  .about-details__description {
+    padding: var(--space-4);
+    color: var(--color-text-muted);
+  }
+
+  .about-details__description p {
+    margin: 0;
+  }
+
+  .about-details__description p + p {
+    margin-top: var(--space-4);
+  }
+
+  .about-details__group {
+    padding: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .about-details__subtitle {
+    margin: 0 0 var(--space-3);
+
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .about-details__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about-details__tag {
+    max-width: 100%;
+    padding: var(--space-1) var(--space-2);
+
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    background-color: var(--color-surface);
+
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+  }
+</style>

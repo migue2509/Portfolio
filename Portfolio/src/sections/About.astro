@@ -1,26 +1,18 @@
 ---
 import Container from "../shared/layout/Container.astro";
-import SectionHeading from "../shared/ui/SectionHeading.astro";
+import AboutDetails from "../features/about/AboutDetails.astro";
 ---
 
 <section id="sobre-mi" class="about" aria-labelledby="about-title">
   <Container>
-    <SectionHeading id="about-title" title="Sobre mí" />
+    <div class="about__frame">
+      <h2 id="about-title" class="about__label">
+        Sobre mí
+      </h2>
 
-    <div class="about__panel">
-      <h3 class="about__title">Tu desarrollador</h3>
-
-      <p class="about__text">
-        Soy Miguel Ospina, desarrollador Full Stack en Medellín, Colombia.
-        Mi enfoque actual está en el backend: construir APIs y organizar
-        la lógica y los datos que hacen funcionar una aplicación.
-      </p>
-
-      <p class="about__text">
-        Me interesa entender el problema antes de programar. Trabajo con
-        mentalidad de crecimiento, comunicación en equipo y atención al
-        detalle para transformar ideas en soluciones útiles.
-      </p>
+      <div class="about__columns">
+        <AboutDetails />
+      </div>
     </div>
   </Container>
 </section>
@@ -31,28 +23,50 @@ import SectionHeading from "../shared/ui/SectionHeading.astro";
     scroll-margin-top: var(--space-8);
   }
 
-  .about__panel {
-    padding: clamp(var(--space-6), 4vw, var(--space-12));
-
+  .about__frame {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-medium);
-    background-color: var(--color-surface);
+    background-color: var(--color-background);
+
+    background-image:
+      linear-gradient(
+        rgb(255 255 255 / 3%) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgb(255 255 255 / 3%) 1px,
+        transparent 1px
+      );
+
+    background-size: 2rem 2rem;
   }
 
-  .about__title {
-    margin: 0 0 var(--space-4);
-
-    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
-    line-height: 1.3;
-  }
-
-  .about__text {
-    max-width: 65ch;
+  .about__label {
+    display: table;
     margin: 0;
-    color: var(--color-text-muted);
+    padding: var(--space-2) var(--space-6);
+
+    border-top-left-radius: calc(var(--radius-medium) - 1px);
+    background-color: #d4d4d8;
+    color: var(--color-background);
+
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 
-  .about__text + .about__text {
-    margin-top: var(--space-4);
+  .about__columns {
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    align-items: stretch;
+  }
+
+  @media (min-width: 64rem) {
+    .about__columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>
