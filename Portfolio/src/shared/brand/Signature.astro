@@ -1,0 +1,23 @@
+---
+import { Image } from "astro:assets";
+import signature from "../../assets/brand/signature.png";
+---
+
+<Image
+  src={signature}
+  alt="Firma de Miguel Ospina"
+  class="signature"
+  widths={[120, 240, signature.width]}
+  sizes="120px"
+  loading="eager"
+/>
+
+<style>
+  .signature {
+    display: block;
+    width: 7.5rem;
+    height: auto;
+    max-height: 3rem;
+    object-fit: contain;
+  }
+</style>
