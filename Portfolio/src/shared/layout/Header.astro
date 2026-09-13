@@ -1,83 +1,292 @@
 ---
-import Container from "./Container.astro";
 import Signature from "../brand/Signature.astro";
+import { socialLinks } from "../../data/social-links";
+
+const contact = socialLinks.find((link) => link.id === "email")!;
+const projectDetail = Astro.url.pathname.startsWith("/proyectos/");
+const links = [
+  { id: "proyectos", label: "Proyectos" },
+  { id: "sobre-mi", label: "Sobre mí" },
+];
 ---
 
-<header class="header">
-  <Container>
-    <div class="header__bar">
-      <a
-        href="/"
-        class="header__brand"
-        aria-label="Miguel Ospina, ir al inicio"
-      >
-        <Signature />
+<header class="header" data-header>
+  <nav class="header__bar" aria-label="Navegación principal">
+    <a href="/" class="header__brand" aria-label="Miguel Ospina, ir al inicio">
+      <Signature />
+    </a>
+
+    <button class="header__toggle" type="button" aria-expanded="false" aria-controls="header-links" hidden>
+      <span>Menú</span>
+      <span aria-hidden="true">☰</span>
+    </button>
+
+    <div class="header__links" id="header-links">
+      {links.map((link) => (
+        <a
+          href={`/#${link.id}`}
+          class="header__link"
+          data-section-link={link.id}
+          aria-current={projectDetail && link.id === "proyectos" ? "location" : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+      <span class="header__link header__link--disabled" role="link" aria-disabled="true" title="Sección próximamente">
+        Experiencia
+      </span>
+      <span class="header__link header__link--disabled" role="link" aria-disabled="true" title="Sección próximamente">
+        ¿Por qué elegirme?
+      </span>
+      <a class="header__link header__contact" href={contact.href}>
+        Trabaja conmigo
       </a>
-
-      <nav class="header__nav" aria-label="Navegación principal">
-  <a href="/" class="header__link">
-    Inicio
-  </a>
-
-  <a href="/#sobre-mi" class="header__link">
-    Sobre mí
-  </a>
-</nav>
     </div>
-  </Container>
+  </nav>
 </header>
+
+<script>
+  const initialized = new WeakSet<HTMLElement>();
+
+  function initializeHeader() {
+    const header = document.querySelector<HTMLElement>("[data-header]");
+    if (!header || initialized.has(header)) return;
+    initialized.add(header);
+
+    const links = Array.from(header.querySelectorAll<HTMLAnchorElement>("[data-section-link]"));
+    const sections = links.flatMap((link) => {
+      const section = document.getElementById(link.dataset.sectionLink!);
+      return section ? [section] : [];
+    });
+    const toggle = header.querySelector<HTMLButtonElement>(".header__toggle")!;
+    const events = new AbortController();
+    const mobile = window.matchMedia("(max-width: 52rem)");
+    function closeMenu() {
+      if (mobile.matches && header!.querySelector(".header__links")?.contains(document.activeElement)) {
+        toggle.focus({ preventScroll: true });
+      }
+      header!.removeAttribute("data-menu-open");
+      toggle.setAttribute("aria-expanded", "false");
+    }
+    toggle.hidden = false;
+    header.setAttribute("data-ready", "");
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      header.toggleAttribute("data-menu-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+    }, { signal: events.signal });
+    header.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && header.hasAttribute("data-menu-open")) {
+        closeMenu();
+        toggle.focus();
+      }
+    }, { signal: events.signal });
+    header.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("a")) closeMenu();
+    }, { signal: events.signal });
+    document.addEventListener("click", (event) => {
+      if (event.target instanceof Node && !header.contains(event.target)) closeMenu();
+    }, { signal: events.signal });
+    mobile.addEventListener("change", () => {
+      if (mobile.matches && header.contains(document.activeElement)) toggle.focus();
+      if (!mobile.matches && document.activeElement === toggle) {
+        header.querySelector<HTMLAnchorElement>(".header__brand")?.focus({ preventScroll: true });
+      }
+      closeMenu();
+    }, { signal: events.signal });
+
+    const visible = new Set<HTMLElement>();
+    function update() {
+      const active = sections.find((section) => visible.has(section));
+      links.forEach((link) => {
+        if (link.dataset.sectionLink === active?.id) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    // Observamos una franja de lectura, sin listeners de scroll continuos.
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const section = entry.target as HTMLElement;
+        if (entry.isIntersecting) visible.add(section);
+        else visible.delete(section);
+      });
+      update();
+    }, { rootMargin: "-25% 0px -55% 0px", threshold: 0 });
+
+    sections.forEach((section) => observer.observe(section));
+    document.addEventListener("astro:before-swap", () => {
+      observer.disconnect();
+      events.abort();
+      initialized.delete(header);
+    }, { once: true });
+  }
+
+  initializeHeader();
+  document.addEventListener("astro:page-load", initializeHeader);
+</script>
 
 <style>
   .header {
-    padding-top: var(--space-6);
+    position: sticky;
+    top: 1rem;
+    z-index: 20;
+    width: calc(100% - 2rem);
+    max-width: 58rem;
+    margin: 1rem auto 0;
   }
 
   .header__bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-
-    min-height: 4rem;
-    padding: var(--space-2) var(--space-4);
-
-    background-color: var(--color-background);
-    border: 1px solid var(--color-border);
+    justify-content: center;
+    gap: 0.25rem;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 3.75rem;
+    margin-inline: auto;
+    padding: 0.125rem 0.5rem 0.125rem 0.75rem;
+    border: 1px solid rgb(255 255 255 / 16%);
     border-radius: 999px;
+    background: rgb(8 8 8 / 86%);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 18%);
+    backdrop-filter: blur(12px);
   }
 
   .header__brand {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     flex-shrink: 0;
+    border-radius: 0.5rem;
+  }
 
-    min-height: 2.75rem;
-    border-radius: var(--radius-small);
+  .header__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+    min-width: 0;
   }
 
   .header__link {
     display: inline-flex;
     align-items: center;
-
+    justify-content: center;
     min-height: 2.75rem;
-    padding-inline: var(--space-4);
-
-    color: var(--color-text-muted);
+    padding: 0.375rem 0.625rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: #e4e4e7;
     font-size: 0.875rem;
+    line-height: 1.2;
     text-decoration: none;
-    border-radius: var(--radius-small);
+    white-space: nowrap;
   }
 
-  .header__link:hover,
-  .header__link:focus-visible {
+  .header__link[aria-current="location"],
+  a.header__link:focus,
+  a.header__link:active {
+    border-color: var(--color-accent);
+    background: rgb(147 197 253 / 25%);
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgb(147 197 253 / 28%), 0 0 14px rgb(147 197 253 / 16%);
+  }
+
+  a.header__link:hover,
+  a.header__link:focus-visible {
     color: var(--color-accent);
+    background: rgb(147 197 253 / 12%);
   }
 
-  .header__nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  min-width: 0;
-}
+  .header__link--disabled {
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+
+  .header__contact {
+    text-transform: uppercase;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .header__toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  :global(#proyectos),
+  :global(#sobre-mi) {
+    scroll-margin-top: 7rem;
+  }
+
+  @media (max-width: 52rem) {
+    .header__bar {
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 0.25rem 0.625rem;
+      border-radius: 1.75rem;
+    }
+
+    .header__brand :global(.signature) {
+      width: 7rem;
+      height: 3rem;
+    }
+
+    .header__toggle:not([hidden]) {
+      display: inline-flex;
+    }
+
+    .header__links {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      width: 100%;
+      gap: 0.25rem;
+      padding: 0.5rem;
+    }
+
+    .header__link {
+      width: 100%;
+      justify-content: flex-start;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .header[data-ready] .header__links {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      left: 0;
+      max-height: calc(100svh - 6rem);
+      overflow-y: auto;
+      border: 1px solid var(--color-border);
+      border-radius: 1.25rem;
+      background: rgb(8 8 8 / 97%);
+      box-shadow: 0 12px 28px rgb(0 0 0 / 35%);
+    }
+
+    .header[data-menu-open] .header__links {
+      display: grid;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a.header__link,
+    .header__contact {
+      transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+    }
+  }
 </style>
