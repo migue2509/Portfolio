@@ -1,0 +1,210 @@
+---
+import { Image } from "astro:assets";
+import {
+  technologies,
+  type TechnologyId,
+} from "../../data/technologies";
+
+interface Props {
+  id: string;
+  title: string;
+  technologyIds: readonly TechnologyId[];
+  duration?: number;
+}
+
+const {
+  id,
+  title,
+  technologyIds,
+  duration = 18,
+} = Astro.props;
+
+const items = technologyIds.map((technologyId) => ({
+  id: technologyId,
+  ...technologies[technologyId],
+}));
+---
+
+<section
+  class="technology-group"
+  aria-labelledby={`${id}-title`}
+  tabindex="0"
+  style={`--item-count: ${items.length}; --duration: ${duration}s;`}
+>
+  <h4 id={`${id}-title`} class="technology-group__title">
+    {title}
+  </h4>
+
+  <div class="technology-group__viewport">
+    <div class="technology-group__track">
+      {
+        [0, 1].map((copy) => (
+          <ul
+            class:list={[
+              "technology-group__list",
+              { "technology-group__list--copy": copy === 1 },
+            ]}
+            aria-hidden={copy === 1 ? "true" : undefined}
+            role="list"
+          >
+            {items.map((technology) => (
+              <li class="technology-group__item">
+                <span class="technology-group__tile">
+                  {technology.icon && (
+                    <Image
+                      src={technology.icon}
+                      alt=""
+                      width={32}
+                      densities={[1, 2]}
+                      loading="lazy"
+                      class="technology-group__icon"
+                    />
+                  )}
+                </span>
+
+                <span class="technology-group__name">
+                  {technology.name}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .technology-group {
+    min-width: 0;
+    border-radius: var(--radius-small);
+  }
+
+  .technology-group__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    margin: 0 0 var(--space-3);
+
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .technology-group__title::before,
+  .technology-group__title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--color-text-muted);
+  }
+
+  .technology-group__viewport {
+    overflow: hidden;
+  }
+
+  .technology-group__track {
+    display: flex;
+    width: 100%;
+  }
+
+  .technology-group__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
+    gap: var(--space-2);
+
+    flex: 0 0 100%;
+    min-width: 0;
+    margin: 0;
+    padding: var(--space-2) var(--space-1);
+    list-style: none;
+  }
+
+  .technology-group__list--copy {
+    display: none;
+  }
+
+  .technology-group__item {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .technology-group__tile {
+    display: grid;
+    place-items: center;
+
+    width: 3rem;
+    height: 3rem;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface);
+  }
+
+  .technology-group__icon {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+  }
+
+  .technology-group__name {
+    width: 100%;
+    min-width: 0;
+    height: 2.5em;
+
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.25;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  @media
+    (hover: hover) and
+    (pointer: fine) and
+    (prefers-reduced-motion: no-preference) {
+    .technology-group__track {
+      width: 200%;
+      animation: stack-slide-right var(--duration) linear infinite;
+    }
+
+    .technology-group__list {
+      flex-basis: 50%;
+      grid-template-columns: repeat(var(--item-count), minmax(0, 1fr));
+    }
+
+    .technology-group__list--copy {
+      display: grid;
+    }
+
+    .technology-group__name {
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+
+    .technology-group:hover .technology-group__track,
+    .technology-group:focus-within .technology-group__track {
+      animation-play-state: paused;
+    }
+
+    .technology-group:hover .technology-group__name,
+    .technology-group:focus-within .technology-group__name {
+      opacity: 1;
+    }
+  }
+
+  @keyframes stack-slide-right {
+    from {
+      transform: translateX(-50%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+</style>

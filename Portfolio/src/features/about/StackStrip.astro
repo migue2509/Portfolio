@@ -1,0 +1,62 @@
+---
+import TechnologyMarquee from "../../shared/ui/TechnologyMarquee.astro";
+---
+
+<section class="stack-strip" aria-labelledby="stack-title">
+  <h3 id="stack-title" class="stack-strip__title">
+    Stack
+  </h3>
+
+  <div class="stack-strip__groups">
+    <TechnologyMarquee
+      id="stack-frontend"
+      title="Frontend"
+      technologyIds={["html", "css", "javascript"]}
+      duration={18}
+    />
+
+    <TechnologyMarquee
+      id="stack-backend"
+      title="Backend"
+      technologyIds={["java", "springBoot", "python", "postgresql"]}
+      duration={22}
+    />
+
+    <TechnologyMarquee
+      id="stack-tools"
+      title="Herramientas"
+      technologyIds={["git", "vscode", "intellij", "figma"]}
+      duration={20}
+    />
+  </div>
+</section>
+
+<style>
+  .stack-strip {
+    margin: 0 var(--space-6) var(--space-6);
+    padding: var(--space-4);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: rgb(9 9 11 / 85%);
+  }
+
+  .stack-strip__title {
+    margin: 0 0 var(--space-4);
+
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .stack-strip__groups {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 64rem) {
+    .stack-strip__groups {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
