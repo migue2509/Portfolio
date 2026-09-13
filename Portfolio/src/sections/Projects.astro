@@ -1,0 +1,123 @@
+---
+import Container from "../shared/layout/Container.astro";
+import ProjectCard from "../features/projects/ProjectCard.astro";
+import { projects } from "../data/projects";
+---
+
+<section
+  id="proyectos"
+  class="projects"
+  aria-labelledby="projects-title"
+>
+  <Container>
+    <div class="projects__frame">
+      <h2 id="projects-title" class="projects__label">
+        Proyectos
+      </h2>
+
+      <div class="projects__list">
+        {projects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+
+      <footer class="projects__footer">
+        <a
+          class="projects__github"
+          href="https://github.com/migue2509"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver todos los proyectos en GitHub
+          <span class="projects__sr-only">
+            (abre en una pestaña nueva)
+          </span>
+        </a>
+      </footer>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .projects {
+    padding-block: var(--space-12);
+    scroll-margin-top: var(--space-8);
+  }
+
+  .projects__frame {
+    min-width: 0;
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+
+    background-color: var(--color-background, #09090b);
+    background-image:
+      linear-gradient(
+        rgb(255 255 255 / 3%) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgb(255 255 255 / 3%) 1px,
+        transparent 1px
+      );
+    background-size: 2rem 2rem;
+  }
+
+  .projects__label {
+    display: table;
+    margin: 0;
+    padding: var(--space-3) var(--space-6);
+
+    background-color: #d4d4d8;
+    color: #18181b;
+
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .projects__list {
+    display: grid;
+    gap: var(--space-12);
+    padding: var(--space-8) var(--space-4) var(--space-12);
+  }
+
+  .projects__footer {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .projects__github {
+    padding: var(--space-2) var(--space-4);
+
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .projects__github:hover {
+    border-color: var(--color-text-muted);
+  }
+
+  .projects__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
