@@ -1,6 +1,6 @@
 ---
 import Container from "../shared/layout/Container.astro";
-import ProjectCard from "../features/projects/ProjectCard.astro";
+import ProjectGallery from "../features/projects/ProjectGallery.astro";
 import { projects } from "../data/projects";
 ---
 
@@ -15,11 +15,7 @@ import { projects } from "../data/projects";
         Proyectos
       </h2>
 
-      <div class="projects__list">
-        {projects.map((project) => (
-          <ProjectCard project={project} />
-        ))}
-      </div>
+      <ProjectGallery projects={projects} />
 
       <footer class="projects__footer">
         <a

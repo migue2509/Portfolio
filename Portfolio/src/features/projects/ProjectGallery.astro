@@ -1,0 +1,186 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+import type { Project } from "./model/project";
+
+interface Props {
+  projects: readonly Project[];
+}
+
+const { projects } = Astro.props;
+---
+
+<div
+  class="project-gallery"
+  data-project-gallery
+  role="region"
+  aria-label="Galería de proyectos"
+  tabindex="0"
+  style={`--project-steps: ${Math.max(projects.length - 1, 0)}`}
+>
+  <div class="project-gallery__stage">
+    <div class="project-gallery__cards">
+      {projects.map((project) => (
+        <div class="project-gallery__item" data-gallery-item>
+          <ProjectCard project={project} />
+        </div>
+      ))}
+    </div>
+
+    <nav
+      class="project-gallery__navigation"
+      aria-label="Seleccionar proyecto"
+      hidden
+      data-gallery-navigation
+    >
+      {projects.map((project) => (
+        <button
+          type="button"
+          class="project-gallery__button"
+          aria-label={`Ver ${project.title}`}
+          data-gallery-button
+        >
+          <span aria-hidden="true"></span>
+        </button>
+      ))}
+    </nav>
+  </div>
+
+  <div
+    class="project-gallery__scroll-space"
+    aria-hidden="true"
+  ></div>
+</div>
+
+<script>
+  import { initializeProjectGalleries } from "./project-gallery";
+
+  initializeProjectGalleries();
+</script>
+
+<style>
+  .project-gallery {
+    position: relative;
+    padding: var(--space-8) var(--space-4) var(--space-12);
+  }
+
+  .project-gallery__stage {
+    position: relative;
+  }
+
+  .project-gallery__cards {
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  .project-gallery__item {
+    min-width: 0;
+  }
+
+  .project-gallery__scroll-space {
+    display: none;
+  }
+
+  .project-gallery__navigation[hidden] {
+    display: none;
+  }
+
+  .project-gallery__navigation {
+    position: absolute;
+    top: 50%;
+    right: var(--space-2);
+    transform: translateY(-50%);
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    max-height: 15rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .project-gallery__button {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .project-gallery__button span {
+    width: 0.5rem;
+    height: 0.5rem;
+
+    border-radius: 50%;
+    background-color: var(--color-border);
+  }
+
+  .project-gallery__button[aria-current="true"] span {
+    background-color: var(--color-accent);
+  }
+
+  .project-gallery[data-enhanced] {
+    --gallery-height: clamp(20rem, 60svh, 34rem);
+
+    height: var(--gallery-height);
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .project-gallery[data-enhanced] .project-gallery__stage {
+    position: sticky;
+    top: 0;
+
+    display: grid;
+    align-content: center;
+
+    height: var(--gallery-height);
+    padding:
+      var(--space-4)
+      clamp(2rem, 5vw, 3rem)
+      var(--space-6);
+  }
+
+  .project-gallery[data-enhanced] .project-gallery__cards {
+    gap: 0;
+    isolation: isolate;
+  }
+
+  .project-gallery[data-enhanced] .project-gallery__item {
+    grid-area: 1 / 1;
+  }
+
+  .project-gallery[data-enhanced]
+    :global(.project-card__heading) {
+    display: grid;
+    place-items: center;
+    min-height: 3.5rem;
+  }
+
+  .project-gallery[data-enhanced]
+    :global(.project-card__preview) {
+    width: min(
+      100%,
+      calc(var(--gallery-height) * 2 - 18rem)
+    );
+    margin-inline: auto;
+  }
+
+  .project-gallery[data-enhanced]
+    .project-gallery__scroll-space {
+    display: block;
+    height: calc(
+      var(--project-steps) * var(--gallery-height)
+    );
+  }
+</style>
