@@ -83,7 +83,7 @@ const { projects } = Astro.props;
     display: grid;
     align-content: center;
     min-height: var(--gallery-height);
-    padding: 3.5rem clamp(2.75rem, 5vw, 4rem) 4rem;
+    padding: 1.5rem clamp(2.75rem, 5vw, 4rem) 3rem;
   }
 
   .project-gallery__cards {
@@ -106,9 +106,8 @@ const { projects } = Astro.props;
   }
 
   .project-gallery :global(.project-card__preview) {
-    width: min(100%, max(10rem, calc((var(--gallery-height) - 15rem) * 2)));
+    width: min(100%, max(10rem, calc((var(--gallery-height) - 12rem) * 2)));
     margin-inline: auto;
-    box-shadow: 0 16px 36px rgb(0 0 0 / 28%);
   }
 
   .project-gallery__scroll-space,

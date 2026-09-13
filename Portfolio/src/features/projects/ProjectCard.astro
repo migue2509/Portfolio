@@ -26,7 +26,7 @@ const { project } = Astro.props;
         src={project.cover.src}
         alt={project.cover.alt}
         widths={[480, 800, 1200, 1600]}
-        sizes="(min-width: 56rem) 768px, 90vw"
+        sizes="(min-width: 64rem) 896px, 90vw"
         loading="lazy"
         class="project-card__image"
       />
@@ -42,7 +42,7 @@ const { project } = Astro.props;
 <style>
   .project-card {
     width: 100%;
-    max-width: 48rem;
+    max-width: 56rem;
     min-width: 0;
     margin: 0 auto;
   }
@@ -66,11 +66,7 @@ const { project } = Astro.props;
 
   .project-card__preview {
     aspect-ratio: 2 / 1;
-    overflow: hidden;
-
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-medium);
-    background-color: #080808;
+    overflow: visible;
   }
 
   .project-card__link {
@@ -79,6 +75,11 @@ const { project } = Astro.props;
     width: 100%;
     height: 100%;
     overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: #080808;
+    box-shadow: 0 16px 36px rgb(0 0 0 / 28%);
 
     color: var(--color-text);
     text-decoration: none;
@@ -150,6 +151,14 @@ const { project } = Astro.props;
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .project-card__link {
+      transition: transform 280ms ease;
+    }
+
+    .project-card__link:focus-visible {
+      transform: translateY(-8px);
+    }
+
     .project-card__image {
       transition: transform 280ms ease;
     }
@@ -168,6 +177,10 @@ const { project } = Astro.props;
     (hover: hover) and
     (pointer: fine) and
     (prefers-reduced-motion: no-preference) {
+    .project-card__preview:hover .project-card__link {
+      transform: translateY(-8px);
+    }
+
     .project-card__link:hover .project-card__image {
       transform: scale(1.035);
     }
