@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import portrait from "../../assets/profile/icon.png";
+import SocialLinks from "../../shared/brand/SocialLinks.astro";
 ---
 
 <article class="profile-card" aria-labelledby="profile-name">
@@ -33,6 +34,16 @@ import portrait from "../../assets/profile/icon.png";
         <span class="profile-card__dot" aria-hidden="true"></span>
         Disponible
       </p>
+
+      <p class="profile-card__availability">
+  <span class="profile-card__dot" aria-hidden="true"></span>
+  Disponible
+</p>
+
+<div class="profile-card__social">
+  <SocialLinks />
+</div>
+
     </div>
   </div>
 </article>
@@ -138,4 +149,8 @@ import portrait from "../../assets/profile/icon.png";
     border-radius: 50%;
     background-color: #22c55e;
   }
+
+  .profile-card__social {
+  margin-top: var(--space-6);
+}
 </style>

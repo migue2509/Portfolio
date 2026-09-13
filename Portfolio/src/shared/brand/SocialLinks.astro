@@ -1,0 +1,82 @@
+---
+import { socialLinks } from "../../data/social-links";
+import githubIcon from "../../assets/social/github.svg?url";
+import linkedinIcon from "../../assets/social/linkedin.svg?url";
+import emailIcon from "../../assets/social/email.png";
+
+const icons = {
+  github: githubIcon,
+  linkedin: linkedinIcon,
+  email: emailIcon.src,
+};
+---
+
+<ul class="social-links" aria-label="Redes y contacto" role="list">
+  {
+    socialLinks.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          data-social={link.id}
+          class="social-links__link"
+          target={link.external ? "_blank" : undefined}
+          rel={link.external ? "noopener noreferrer" : undefined}
+          aria-label={
+            link.external
+              ? `${link.label} (abre en una pestaña nueva)`
+              : link.label
+          }
+          title={link.label}
+        >
+          <img
+            src={icons[link.id]}
+            alt=""
+            width="20"
+            height="20"
+            class="social-links__icon"
+          />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .social-links__link {
+    display: grid;
+    place-items: center;
+
+    width: 2.75rem;
+    height: 2.75rem;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface);
+    text-decoration: none;
+  }
+
+  .social-links__link:hover,
+  .social-links__link:focus-visible {
+    border-color: var(--color-accent);
+  }
+
+  .social-links__icon {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+</style>
