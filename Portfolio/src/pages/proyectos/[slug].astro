@@ -1,0 +1,115 @@
+---
+import { Image } from "astro:assets";
+import MainLayout from "../../layouts/MainLayout.astro";
+import Container from "../../shared/layout/Container.astro";
+import { projects } from "../../data/projects";
+import type { Project } from "../../features/projects/model/project";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+
+const images = [
+  project.cover,
+  ...project.gallery.filter(
+    (image) => image.src.src !== project.cover.src.src,
+  ),
+];
+---
+
+<MainLayout
+  title={`${project.title} | Miguel Ospina`}
+  description={project.summary}
+>
+  <main class="project-detail">
+    <Container>
+      <a class="project-detail__back" href="/#proyectos">
+        ← Volver a proyectos
+      </a>
+
+      <header class="project-detail__header">
+        <h1>{project.title}</h1>
+        <p>{project.summary}</p>
+      </header>
+
+      <div class="project-detail__gallery">
+        {images.map((image, index) => (
+          <figure class="project-detail__figure">
+            <Image
+              src={image.src}
+              alt={image.alt}
+              widths={[480, 960, 1440]}
+              sizes="(min-width: 64rem) 960px, 90vw"
+              loading={index === 0 ? "eager" : "lazy"}
+              class="project-detail__image"
+            />
+          </figure>
+        ))}
+      </div>
+    </Container>
+  </main>
+</MainLayout>
+
+<style>
+  .project-detail {
+    padding-block: var(--space-8) var(--space-16);
+  }
+
+  .project-detail__back {
+    display: inline-block;
+    padding-block: var(--space-2);
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    text-underline-offset: 0.25em;
+  }
+
+  .project-detail__header {
+    max-width: 60rem;
+    margin: var(--space-8) auto;
+  }
+
+  .project-detail__header h1 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .project-detail__header p {
+    max-width: 65ch;
+    margin: var(--space-4) 0 0;
+    color: var(--color-text-muted);
+  }
+
+  .project-detail__gallery {
+    display: grid;
+    gap: var(--space-8);
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+
+  .project-detail__figure {
+    margin: 0;
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: #080808;
+  }
+
+  .project-detail__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

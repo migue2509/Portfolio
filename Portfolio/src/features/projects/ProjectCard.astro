@@ -17,21 +17,32 @@ const { project } = Astro.props;
   </figcaption>
 
   <div class="project-card__preview">
-    <Image
-      src={project.cover.src}
-      alt={project.cover.alt}
-      widths={[480, 800, 1200]}
-      sizes="(min-width: 48rem) 576px, 90vw"
-      loading="lazy"
-      class="project-card__image"
-    />
+    <a
+      class="project-card__link"
+      href={`/proyectos/${project.slug}/`}
+      aria-label={`Abrir proyecto: ${project.title}`}
+    >
+      <Image
+        src={project.cover.src}
+        alt={project.cover.alt}
+        widths={[480, 800, 1200, 1600]}
+        sizes="(min-width: 56rem) 768px, 90vw"
+        loading="lazy"
+        class="project-card__image"
+      />
+
+      <span class="project-card__action" aria-hidden="true">
+        Abrir proyecto
+        <span class="project-card__arrow">↗</span>
+      </span>
+    </a>
   </div>
 </figure>
 
 <style>
   .project-card {
     width: 100%;
-    max-width: 36rem;
+    max-width: 48rem;
     min-width: 0;
     margin: 0 auto;
   }
@@ -44,10 +55,10 @@ const { project } = Astro.props;
 
   .project-card__title {
     margin: 0;
-
     color: var(--color-text);
+
     font-family: var(--font-mono);
-    font-size: clamp(1rem, 0.875rem + 0.5vw, 1.25rem);
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
     font-weight: 800;
     line-height: 1.4;
     overflow-wrap: anywhere;
@@ -59,7 +70,18 @@ const { project } = Astro.props;
 
     border: 1px solid var(--color-border);
     border-radius: var(--radius-medium);
-    background-color: var(--color-surface);
+    background-color: #080808;
+  }
+
+  .project-card__link {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    color: var(--color-text);
+    text-decoration: none;
   }
 
   .project-card__image {
@@ -67,5 +89,87 @@ const { project } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+
+  .project-card__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 65%),
+      transparent 55%
+    );
+  }
+
+  .project-card__action {
+    position: absolute;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    z-index: 1;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 999px;
+    background-color: rgb(8 8 8 / 90%);
+
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    pointer-events: none;
+  }
+
+  .project-card__arrow {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .project-card__link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -4px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-card__action,
+    .project-card__link::after {
+      opacity: 0;
+    }
+
+    .project-card__link:hover .project-card__action,
+    .project-card__link:focus-visible .project-card__action,
+    .project-card__link:hover::after,
+    .project-card__link:focus-visible::after {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .project-card__image {
+      transition: transform 280ms ease;
+    }
+
+    .project-card__action,
+    .project-card__link::after {
+      transition: opacity 180ms ease;
+    }
+
+    .project-card__link:focus-visible .project-card__image {
+      transform: scale(1.035);
+    }
+  }
+
+  @media
+    (hover: hover) and
+    (pointer: fine) and
+    (prefers-reduced-motion: no-preference) {
+    .project-card__link:hover .project-card__image {
+      transform: scale(1.035);
+    }
   }
 </style>

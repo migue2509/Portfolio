@@ -13,8 +13,8 @@ const { projects } = Astro.props;
   class="project-gallery"
   data-project-gallery
   role="region"
-  aria-label="Galería de proyectos"
-  tabindex="0"
+  aria-label="Galería de proyectos. Usa las flechas arriba y abajo para cambiar de proyecto."
+  tabindex={projects.length > 1 ? 0 : undefined}
   style={`--project-steps: ${Math.max(projects.length - 1, 0)}`}
 >
   <div class="project-gallery__stage">
@@ -32,68 +32,119 @@ const { projects } = Astro.props;
       hidden
       data-gallery-navigation
     >
-      {projects.map((project) => (
+      {projects.map((project, index) => (
         <button
           type="button"
           class="project-gallery__button"
-          aria-label={`Ver ${project.title}`}
+          aria-label={`Ver ${project.title}, proyecto ${index + 1} de ${projects.length}`}
           data-gallery-button
         >
           <span aria-hidden="true"></span>
         </button>
       ))}
     </nav>
-  </div>
 
-  <div
-    class="project-gallery__scroll-space"
-    aria-hidden="true"
-  ></div>
+    <p class="project-gallery__hint" aria-hidden="true">
+      Desliza o usa ↑ ↓ para explorar
+    </p>
+    <p class="project-gallery__status" role="status" aria-atomic="true" data-gallery-status></p>
+  </div>
+  <div class="project-gallery__scroll-space" aria-hidden="true"></div>
 </div>
 
 <script>
   import { initializeProjectGalleries } from "./project-gallery";
 
   initializeProjectGalleries();
+  document.addEventListener("astro:page-load", initializeProjectGalleries);
 </script>
 
 <style>
   .project-gallery {
+    --gallery-height: clamp(24rem, 68svh, 42rem);
+    --gallery-step: max(52rem, 110svh);
     position: relative;
-    padding: var(--space-8) var(--space-4) var(--space-12);
+    height: var(--gallery-height);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    overflow-anchor: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .project-gallery:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -4px;
   }
 
   .project-gallery__stage {
     position: relative;
+    display: grid;
+    align-content: center;
+    min-height: var(--gallery-height);
+    padding: 3.5rem clamp(2.75rem, 5vw, 4rem) 4rem;
   }
 
   .project-gallery__cards {
     display: grid;
     gap: var(--space-12);
+    isolation: isolate;
+    min-width: 0;
   }
 
   .project-gallery__item {
     min-width: 0;
   }
 
-  .project-gallery__scroll-space {
+  .project-gallery :global(.project-card__heading) {
+    display: grid;
+    place-items: center;
+    min-height: 4.5rem;
+    margin-bottom: 3rem;
+    padding-inline: 0;
+  }
+
+  .project-gallery :global(.project-card__preview) {
+    width: min(100%, max(10rem, calc((var(--gallery-height) - 15rem) * 2)));
+    margin-inline: auto;
+    box-shadow: 0 16px 36px rgb(0 0 0 / 28%);
+  }
+
+  .project-gallery__scroll-space,
+  .project-gallery__navigation[hidden],
+  .project-gallery__hint {
     display: none;
   }
 
-  .project-gallery__navigation[hidden] {
-    display: none;
+  .project-gallery[data-enhanced] .project-gallery__stage {
+    position: sticky;
+    top: 0;
+    height: var(--gallery-height);
+  }
+
+  .project-gallery[data-enhanced] .project-gallery__cards {
+    gap: 0;
+  }
+
+  .project-gallery[data-enhanced] .project-gallery__item {
+    grid-area: 1 / 1;
+  }
+
+  .project-gallery[data-enhanced] .project-gallery__scroll-space {
+    display: block;
+    height: calc(var(--project-steps) * var(--gallery-step));
   }
 
   .project-gallery__navigation {
     position: absolute;
     top: 50%;
-    right: var(--space-2);
+    right: 0.125rem;
+    z-index: 2;
     transform: translateY(-50%);
-    z-index: 1;
-
     display: flex;
     flex-direction: column;
-    max-height: 15rem;
+    max-height: min(18rem, 70%);
     overflow-y: auto;
     scrollbar-width: thin;
   }
@@ -102,85 +153,53 @@ const { projects } = Astro.props;
     display: grid;
     place-items: center;
     flex-shrink: 0;
-
-    width: 2rem;
-    height: 2rem;
+    width: 2.75rem;
+    height: 2.75rem;
     padding: 0;
-
     border: 0;
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
   }
 
+  .project-gallery__button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -5px;
+  }
+
   .project-gallery__button span {
     width: 0.5rem;
     height: 0.5rem;
-
     border-radius: 50%;
-    background-color: var(--color-border);
+    background: var(--color-text-muted);
   }
 
   .project-gallery__button[aria-current="true"] span {
-    background-color: var(--color-accent);
+    background: var(--color-accent);
+    transform: scale(1.4);
+    box-shadow: 0 0 0 4px rgb(147 197 253 / 12%);
   }
 
-  .project-gallery[data-enhanced] {
-    --gallery-height: clamp(20rem, 60svh, 34rem);
-
-    height: var(--gallery-height);
-    padding: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-border) transparent;
-  }
-
-  .project-gallery[data-enhanced] .project-gallery__stage {
-    position: sticky;
-    top: 0;
-
-    display: grid;
-    align-content: center;
-
-    height: var(--gallery-height);
-    padding:
-      var(--space-4)
-      clamp(2rem, 5vw, 3rem)
-      var(--space-6);
-  }
-
-  .project-gallery[data-enhanced] .project-gallery__cards {
-    gap: 0;
-    isolation: isolate;
-  }
-
-  .project-gallery[data-enhanced] .project-gallery__item {
-    grid-area: 1 / 1;
-  }
-
-  .project-gallery[data-enhanced]
-    :global(.project-card__heading) {
-    display: grid;
-    place-items: center;
-    min-height: 3.5rem;
-  }
-
-  .project-gallery[data-enhanced]
-    :global(.project-card__preview) {
-    width: min(
-      100%,
-      calc(var(--gallery-height) * 2 - 18rem)
-    );
-    margin-inline: auto;
-  }
-
-  .project-gallery[data-enhanced]
-    .project-gallery__scroll-space {
+  .project-gallery[data-enhanced] .project-gallery__hint {
     display: block;
-    height: calc(
-      var(--project-steps) * var(--gallery-height)
-    );
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    font: 0.75rem var(--font-mono);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .project-gallery__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 </style>
