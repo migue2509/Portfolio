@@ -11,8 +11,8 @@ import SocialLinks from "../../shared/brand/SocialLinks.astro";
         src={portrait}
         alt="Retrato de Miguel Ospina"
         class="profile-card__image"
-        widths={[192, 384, portrait.width]}
-        sizes="192px"
+        widths={[240, 480]}
+        sizes="240px"
         loading="lazy"
       />
     </div>
@@ -69,7 +69,7 @@ import SocialLinks from "../../shared/brand/SocialLinks.astro";
 
   .profile-card__surface {
     width: 100%;
-    max-width: 20rem;
+    max-width: none;
     padding: var(--space-6) var(--space-4);
 
     border: 1px solid rgb(255 255 255 / 4%);
@@ -85,21 +85,19 @@ import SocialLinks from "../../shared/brand/SocialLinks.astro";
 
   .profile-card__portrait {
     width: 100%;
-    max-width: 12rem;
-    aspect-ratio: 1;
+    max-width: 15rem;
     margin-inline: auto;
   }
 
   .profile-card__image {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    height: auto;
   }
 
   .profile-card__information {
-    margin-top: var(--space-6);
-    font-family: var(--font-mono);
+  margin-top: var(--space-1);
+  font-family: var(--font-mono);
   }
 
   .profile-card__location {

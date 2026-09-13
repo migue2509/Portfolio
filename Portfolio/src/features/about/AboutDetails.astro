@@ -1,21 +1,32 @@
 ---
+import { Image } from "astro:assets";
+
+import persistenciaIcon from "../../assets/about/persistencia.png";
+import mentalidadIcon from "../../assets/about/mentalidad.png";
+import responsabilidadIcon from "../../assets/about/responsabilidad.png";
+import futuroIcon from "../../assets/about/orientacion-futuro.png";
+import comunicacionIcon from "../../assets/about/comunicacion.png";
+import productividadIcon from "../../assets/about/productividad.png";
+import detalleIcon from "../../assets/about/orientacion-al-detalle.png";
+import equipoIcon from "../../assets/about/trabajo-equipo.png";
+
 const groups = [
   {
     title: "Mentalidad",
     items: [
-      "Persistencia",
-      "Mentalidad de crecimiento",
-      "Responsabilidad personal",
-      "Orientación al futuro",
+      { label: "Persistencia", icon: persistenciaIcon },
+      { label: "Mentalidad de crecimiento", icon: mentalidadIcon },
+      { label: "Responsabilidad personal", icon: responsabilidadIcon },
+      { label: "Orientación al futuro", icon: futuroIcon },
     ],
   },
   {
     title: "Habilidades de comportamiento",
     items: [
-      "Comunicación",
-      "Productividad",
-      "Orientación al detalle",
-      "Trabajo en equipo",
+      { label: "Comunicación", icon: comunicacionIcon },
+      { label: "Productividad", icon: productividadIcon },
+      { label: "Orientación al detalle", icon: detalleIcon },
+      { label: "Trabajo en equipo", icon: equipoIcon },
     ],
   },
 ];
@@ -48,8 +59,20 @@ const groups = [
 
         <ul class="about-details__tags" role="list">
           {group.items.map((item) => (
-            <li class="about-details__tag">{item}</li>
-          ))}
+  <li class="about-details__tag">
+    <Image
+      src={item.icon}
+      alt=""
+      width={16}
+      height={16}
+      fit="contain"
+      densities={[1, 2]}
+      loading="lazy"
+      class="about-details__icon"
+    />
+    <span>{item.label}</span>
+  </li>
+))}
         </ul>
       </div>
     ))
@@ -106,26 +129,42 @@ const groups = [
     line-height: 1.5;
   }
 
-  .about-details__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
+.about-details__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
-  .about-details__tag {
-    max-width: 100%;
-    padding: var(--space-1) var(--space-2);
 
-    border: 1px solid var(--color-border);
-    border-radius: 0.25rem;
-    background-color: var(--color-surface);
+.about-details__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
 
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    overflow-wrap: anywhere;
-  }
+  max-width: 100%;
+  padding: var(--space-1) var(--space-2);
+
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  background-color: var(--color-surface);
+
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+  .about-details__icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.about-details__tag > span {
+  min-width: 0;
+}
 </style>
