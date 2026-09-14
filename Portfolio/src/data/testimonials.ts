@@ -12,31 +12,27 @@ export interface Testimonial {
   logo?: { src: ImageMetadata; alt: string };
 }
 
-// Borradores de diseño: no son declaraciones reales de estas personas.
-// Sustituir el texto por el aprobado por su autor antes de retirar draft.
+// Textos proporcionados por Miguel para el portafolio.
 export const testimonials: readonly Testimonial[] = [
   {
     id: 'jean-franco-ochoa',
     logo: { src: juanChupeLogo, alt: 'Logo de Juan Chupe Granizados' },
     name: 'Jean Franco Ochoa',
     role: 'CEO · Juan Chupe Granizados',
-    quote: 'Una solución pensada para simplificar la operación y reunir en un solo lugar lo que el negocio necesita cada día.',
-    draft: true,
+    quote: 'Miguel entendió nuestras necesidades y las transformó en una solución funcional, cuidando tanto la experiencia del usuario como la parte técnica.',
   },
   {
     id: 'michelle-serna',
     logo: { src: blossomGlowLogo, alt: 'Logo de Blossom Glow' },
     name: 'Michelle Serna',
     role: 'CEO · Blossom Glow',
-    quote: 'La atención a los detalles y una comunicación clara hacen que una idea empiece a tomar forma con confianza.',
-    draft: true,
+    quote: 'Destaco su creatividad, comunicación y capacidad para convertir una idea en un producto digital atractivo y bien estructurado.',
   },
   {
     id: 'egidio-mosquera',
     logo: { src: dinamarcaLogo, alt: 'Escudo de la Institución Educativa Dinamarca' },
     name: 'Egidio Mosquera',
     role: 'Institución Educativa Dinamarca',
-    quote: 'La curiosidad, la disposición para aprender y el compromiso son una buena base para afrontar nuevos retos.',
-    draft: true,
+    quote: 'Miguel demostró compromiso y responsabilidad durante el desarrollo, proponiendo soluciones claras y adaptadas a las necesidades de la institución.',
   },
 ];
