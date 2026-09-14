@@ -6,10 +6,10 @@ Portafolio personal para presentar mis proyectos, experiencia, habilidades y for
 
 ## Enlaces principales
 
-- [Demo del portafolio](https://miguelospinadev.vercel.app)
-- [Diseño en Figma](https://www.figma.com/design/clo4maMz0d7bmX5WPvsLmo/PORTAFOLIO?node-id=20-26)
-- [LinkedIn](https://www.linkedin.com/in/miguel-ospina-desarrollador-full-stack/)
-- [GitHub](https://github.com/migue2509)
+[![Demo](https://img.shields.io/badge/Demo-en_vivo-2563EB?style=for-the-badge&logo=vercel&logoColor=white)](https://miguelospinadev.vercel.app)
+[![Figma](https://img.shields.io/badge/Figma-dise%C3%B1o-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/clo4maMz0d7bmX5WPvsLmo/PORTAFOLIO?node-id=20-26)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-perfil-0A66C2?style=for-the-badge)](https://www.linkedin.com/in/miguel-ospina-desarrollador-full-stack/)
+[![GitHub](https://img.shields.io/badge/GitHub-migue2509-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/migue2509)
 
 ## Sobre el proyecto
 
@@ -21,7 +21,7 @@ Está construido con Astro y TypeScript. Genera páginas estáticas, optimiza la
 
 Imagen utilizada en la presentación del portafolio:
 
-<img src="src/assets/profile/Image.png" alt="Retrato ilustrado de Miguel Ospina" width="280" />
+<img src="Portfolio/src/assets/profile/Image.png" alt="Retrato ilustrado de Miguel Ospina" width="280" />
 
 Pendiente de añadir una captura completa o un video del sitio.
 
@@ -41,6 +41,14 @@ Pendiente de añadir una captura completa o un video del sitio.
 
 ## Stack
 
+![Astro](https://img.shields.io/badge/Astro-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-663399?style=for-the-badge&logo=css&logoColor=white)
+![GSAP](https://img.shields.io/badge/GSAP-0AE448?style=for-the-badge&logo=gsap&logoColor=black)
+![Formspree](https://img.shields.io/badge/Formspree-E5122E?style=for-the-badge)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
 - **Astro:** generación estática y componentes.
 - **TypeScript:** datos y comportamiento de la interfaz.
 - **CSS:** estilos locales, variables y diseño responsive.
@@ -50,6 +58,8 @@ Pendiente de añadir una captura completa o un video del sitio.
 - **Herramientas de trabajo:** npm, Git y GitHub.
 
 ## Estructura del proyecto
+
+La aplicación se encuentra en la carpeta `Portfolio/`. Su estructura interna es:
 
 ```text
 public/
@@ -76,6 +86,7 @@ El contenido se mantiene separado de la presentación. Las páginas de proyectos
 Requisito: **Node.js 22.12.0 o superior**.
 
 ```bash
+cd Portfolio
 npm install
 npm run dev
 ```
@@ -99,7 +110,7 @@ La compilación se genera en `dist/`. Para utilizar otro formulario de Formspree
 - [Repositorio del portafolio](https://github.com/migue2509/Portfolio)
 - [Repositorio de Tu Cancha](https://github.com/DilsiaLamadridTorres/APP_TuCancha)
 - [Demo de Tu Cancha](https://dilsialamadridtorres.github.io/APP_TuCancha/)
-- [Hoja de vida](public/documents/miguel-ospina-cv.pdf)
+- [Hoja de vida](Portfolio/public/documents/miguel-ospina-cv.pdf)
 
 ## Autor
 
