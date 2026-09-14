@@ -3,9 +3,7 @@ import { Image } from "astro:assets";
 import SocialLinks from "../shared/brand/SocialLinks.astro";
 import Signature from "../shared/brand/Signature.astro";
 import portrait from "../assets/profile/icon.png";
-import { socialLinks } from "../data/social-links";
 
-const contact = socialLinks.find((link) => link.id === "email")!;
 const formspreeEndpoint = (import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? "https://formspree.io/f/xaeyglpo").trim();
 if (formspreeEndpoint && !/^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+\/?$/.test(formspreeEndpoint)) {
   throw new Error("PUBLIC_FORMSPREE_ENDPOINT debe ser la URL https://formspree.io/f/ de tu formulario.");
@@ -24,7 +22,7 @@ const year = new Date().getFullYear();
           <div class="contact__social"><SocialLinks /></div>
         </div>
 
-        <form class="contact__form" action={formspreeEndpoint || undefined} method="post" data-contact-form aria-describedby="contact-help">
+        <form class="contact__form" action={formspreeEndpoint || undefined} method="post" data-contact-form>
           <div class="contact__field">
             <label for="contact-name">Nombre</label>
             <div class="contact__input-surface grain-surface">
@@ -50,9 +48,6 @@ const year = new Date().getFullYear();
             </div>
           </div>
           <button type="submit" class="contact__send" disabled={!formspreeEndpoint}>Enviar</button>
-          <p id="contact-help" class="contact__help">
-            {formspreeEndpoint ? "También puedes " : "Por ahora puedes "}<a href={contact.href}>escribirme por correo</a>.
-          </p>
           <p class="contact__status" role="status" aria-live="polite" aria-atomic="true" data-contact-status></p>
         </form>
       </div>
@@ -200,8 +195,7 @@ const year = new Date().getFullYear();
   .contact__send:disabled { opacity: 0.55; cursor: not-allowed; }
   .contact__status[data-state="error"] { color: #fca5a5; }
   .contact__status[data-state="success"] { color: #86efac; }
-  .contact__help, .contact__status { margin: 0; font-size: 0.75rem; line-height: 1.5; color: var(--color-text-muted); }
-  .contact__help a, .contact__status { color: var(--color-accent); }
+  .contact__status { margin: 0; font-size: 0.75rem; line-height: 1.5; color: var(--color-accent); }
   .contact__status:empty { display: none; }
   .contact__footer {
     margin-inline: clamp(1rem, 3vw, 2rem);
