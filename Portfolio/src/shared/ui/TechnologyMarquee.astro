@@ -164,10 +164,7 @@ const items = technologyIds.map((technologyId) => ({
     overflow-wrap: anywhere;
   }
 
-  @media
-    (hover: hover) and
-    (pointer: fine) and
-    (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
     .technology-group__track {
       width: 200%;
       animation: stack-slide-right var(--duration) linear infinite;
@@ -182,19 +179,14 @@ const items = technologyIds.map((technologyId) => ({
       display: grid;
     }
 
-    .technology-group__name {
-      opacity: 0;
-      transition: opacity 160ms ease;
-    }
-
-    .technology-group:hover .technology-group__track,
     .technology-group:focus-within .technology-group__track {
       animation-play-state: paused;
     }
+  }
 
-    .technology-group:hover .technology-group__name,
-    .technology-group:focus-within .technology-group__name {
-      opacity: 1;
+  @media (hover: hover) and (pointer: fine) {
+    .technology-group:hover .technology-group__track {
+      animation-play-state: paused;
     }
   }
 
