@@ -21,9 +21,9 @@ export const experiences = [
     role: "Desarrollador Full Stack freelance",
     start: "2026-09",
     startLabel: "Sep 2026",
-    endLabel: "Actualidad",
+    endLabel: "En Desarrollo",
     year: "2026",
-    technologies: ["Figma", "Scrum", "Git", "GitHub"],
+    technologies: ["Figma", "Scrum", "Git", "GitHub", "Java", "Spring Boot", "PostgreSQL", "HTML", "CSS", "JavaScript"],
     impact: [
       "Levantamiento de requerimientos y diseño en Figma de una aplicación para gestionar y dar seguimiento a los asesorados de un entrenador personal.",
       "Desarrollo previsto en Java, Spring Boot, PostgreSQL, HTML, CSS y JavaScript.",
@@ -36,7 +36,7 @@ export const experiences = [
     role: "Desarrollador Full Stack freelance",
     start: "2026-02",
     startLabel: "Feb 2026",
-    endLabel: "Actualidad",
+    endLabel: "Sep 2026",
     year: "2026",
     technologies: ["Python", "Django REST Framework", "PostgreSQL", "React", "Tailwind CSS", "Git", "GitHub"],
     impact: [
