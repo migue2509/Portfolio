@@ -79,7 +79,7 @@ const year = new Date().getFullYear();
 <style>
   .contact {
     margin-inline: calc(-1 * var(--page-gutter, 0px));
-    padding-block: var(--space-12) var(--space-8);
+    padding-block: var(--space-12) 0;
     scroll-margin-top: 7rem;
   }
   .contact__frame {
@@ -99,7 +99,7 @@ const year = new Date().getFullYear();
   .contact__layout {
     display: grid;
     gap: 2rem;
-    max-width: 58rem;
+    max-width: 72rem;
     margin: 0 auto;
     padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1rem, 4vw, 3rem);
   }
@@ -232,7 +232,7 @@ const year = new Date().getFullYear();
     text-transform: uppercase;
   }
   @media (min-width: 48rem) {
-    .contact__layout { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 2.5rem; }
+    .contact__layout { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 2.5rem; }
     .contact__intro { text-align: left; padding-top: 0.5rem; }
     .contact__portrait { margin-inline: 0; }
     .contact__social { margin-inline: 0; }
