@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Container from "../shared/layout/Container.astro";
+import SocialRail from "../shared/layout/SocialRail.astro";
 import portrait from "../assets/profile/Image.png";
 import { existsSync } from "node:fs";
 
@@ -62,6 +63,7 @@ const { cvUrl = localCvExists ? "/documents/miguel-ospina-cv.pdf" : undefined } 
       </div>
     </div>
   </Container>
+  <SocialRail />
   <p class="hero__download-notice" role="status" aria-live="polite" aria-atomic="true" data-cv-notice></p>
 </section>
 
@@ -125,6 +127,7 @@ const { cvUrl = localCvExists ? "/documents/miguel-ospina-cv.pdf" : undefined } 
 
 <style>
   .hero {
+    position: relative;
     padding-block: clamp(2rem, 5vw, 4rem);
   }
 

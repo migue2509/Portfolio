@@ -2,7 +2,6 @@
 import "@fontsource-variable/geist/wght.css";
 import "@fontsource-variable/geist-mono/wght.css";
 import Header from "../shared/layout/Header.astro";
-import SocialRail from "../shared/layout/SocialRail.astro";
 import "../shared/styles/global.css";
 
 interface Props {
@@ -23,7 +22,6 @@ const { title, description } = Astro.props;
   </head>
 
  <body class="site-body">
-  <SocialRail />
   <Header />
   <slot />
 </body>
@@ -33,13 +31,11 @@ const { title, description } = Astro.props;
   .site-body {
     --page-gutter: 0px;
     padding-inline: var(--page-gutter);
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   }
 
   @media (min-width: 64rem) {
     .site-body {
       --page-gutter: 3.5rem;
-      padding-bottom: 0;
     }
   }
 </style>
