@@ -3,8 +3,18 @@ import inicio from '../assets/projects/tu-cancha/gallery/inicio.png';
 import canchas from '../assets/projects/tu-cancha/gallery/canchas.png';
 import nosotros from '../assets/projects/tu-cancha/gallery/nosotros.png';
 import contacto from '../assets/projects/tu-cancha/gallery/contacto.png';
+import unete from '../assets/projects/tu-cancha/gallery/unete.png';
+import iniciarSesion from '../assets/projects/tu-cancha/gallery/iniciar-sesion.png';
+import pagarReserva from '../assets/projects/tu-cancha/gallery/pagar-reserva.png';
+import misReservas from '../assets/projects/tu-cancha/gallery/mis-reservas.png';
+import registroComplejo from '../assets/projects/tu-cancha/gallery/registro-complejo.png';
+import { tuCanchaFlowViews, tuCanchaGalleryOrder } from './tu-cancha-gallery-flows';
 
-const images = { 'inicio.png': inicio, 'canchas.png': canchas, 'nosotros.png': nosotros, 'contacto.png': contacto };
+const images = {
+  'inicio.png': inicio, 'canchas.png': canchas, 'nosotros.png': nosotros, 'contacto.png': contacto,
+  'unete.png': unete, 'iniciar-sesion.png': iniciarSesion, 'pagar-reserva.png': pagarReserva,
+  'mis-reservas.png': misReservas, 'registro-complejo.png': registroComplejo,
+};
 
 const entries = [
   {
@@ -33,6 +43,10 @@ const entries = [
   },
 ] as const;
 
-export const tuCanchaGallery: readonly ProjectImage[] = entries.map(({ file, ...entry }) => ({
+const orderedEntries = [...entries, ...tuCanchaFlowViews].sort((a, b) =>
+  tuCanchaGalleryOrder.indexOf(a.file) - tuCanchaGalleryOrder.indexOf(b.file),
+);
+
+export const tuCanchaGallery: readonly ProjectImage[] = orderedEntries.map(({ file, ...entry }) => ({
   ...entry, src: images[file],
 }));

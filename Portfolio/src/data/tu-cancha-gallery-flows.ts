@@ -1,5 +1,5 @@
-// Vistas pendientes de recibir sus archivos de imagen.
-export const pendingTuCanchaViews = [
+// Contenido proporcionado por Miguel para los flujos de usuario.
+export const tuCanchaFlowViews = [
   {
     file: 'unete.png', title: 'Únete',
     alt: 'Vista de registro de nuevos usuarios en TuCancha',
