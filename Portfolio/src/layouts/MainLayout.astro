@@ -10,9 +10,10 @@ interface Props {
   title: string;
   description: string;
   intro?: boolean;
+  showHeader?: boolean;
 }
 
-const { title, description, intro = false } = Astro.props;
+const { title, description, intro = false, showHeader = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,6 +27,8 @@ const { title, description, intro = false } = Astro.props;
     {intro && <script is:inline>
       (() => {
         try {
+          // Un enlace a una sección debe abrir directamente su destino.
+          if (window.location.hash) return;
           if (matchMedia('(prefers-reduced-motion: reduce)').matches || sessionStorage.getItem('portfolio:intro-seen')) return;
           sessionStorage.setItem('portfolio:intro-seen', '1');
           document.documentElement.classList.add('intro-pending');
@@ -42,7 +45,7 @@ const { title, description, intro = false } = Astro.props;
 
  <body class="site-body">
   {intro && <CommitIntro />}
-  <Header />
+  {showHeader && <Header />}
   <slot />
 </body>
 </html>

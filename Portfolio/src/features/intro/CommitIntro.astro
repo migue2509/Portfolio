@@ -13,7 +13,7 @@ import { cells } from './pattern';
       ))}
     </div>
   </div>
-  <button class="commit-intro__skip" type="button" data-intro-skip autofocus>Omitir introducción</button>
+  <button class="commit-intro__skip" type="button" data-intro-skip>Omitir introducción</button>
 </dialog>
 
 <!-- Arranca sin esperar al bundle; Escape y el botón funcionan aunque GSAP falle. -->
@@ -48,6 +48,7 @@ import { cells } from './pattern';
     motion.addEventListener('change', finish, { signal: events.signal });
     try {
       dialog.showModal();
+      dialog.querySelector('[data-intro-skip]').focus({ preventScroll: true });
       timer = setTimeout(finish, 3500);
     } catch { finish(); }
   })();

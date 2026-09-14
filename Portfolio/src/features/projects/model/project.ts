@@ -15,4 +15,13 @@ export interface Project {
   gallery: readonly ProjectImage[];
   repositoryUrl?: string;
   liveUrl?: string;
+  category?: string;
+  role?: string;
+  client?: string;
+  team?: string;
+  dateLabel?: string;
+  status?: string;
+  tags?: readonly string[];
+  tools?: readonly string[];
+  problem?: string;
 }

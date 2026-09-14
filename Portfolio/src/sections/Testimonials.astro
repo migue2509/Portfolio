@@ -1,0 +1,78 @@
+---
+import Container from '../shared/layout/Container.astro';
+import { testimonials } from '../data/testimonials';
+---
+
+<section id="testimonios" class="testimonials" aria-labelledby="testimonials-title">
+  <Container>
+    <div class="testimonials__frame">
+      <h2 id="testimonials-title" class="testimonials__label grain-surface">Testimonios</h2>
+      {testimonials.length > 0 ? (
+        <div class="testimonials__carousel" data-testimonials role="region" aria-roledescription="carrusel" aria-label="Testimonios de clientes y colaboradores" tabindex="0">
+          <div class="testimonials__stage" data-testimonial-stage>
+            {testimonials.map((testimonial) => (
+              <article class="testimonials__card" data-testimonial-card>
+                <div class="testimonials__paper">
+                  <span class="testimonials__avatar grain-surface" aria-hidden="true">
+                    {testimonial.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join('')}
+                  </span>
+                  {testimonial.draft && <span class="testimonials__draft">Texto de muestra · pendiente de aprobación</span>}
+                  <blockquote>{testimonial.quote}</blockquote>
+                  <footer><strong>{testimonial.name}</strong><span>{testimonial.role}</span></footer>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div class="testimonials__controls" data-testimonial-controls hidden>
+            <button type="button" data-testimonial-prev aria-label="Testimonio anterior">←</button>
+            <p data-testimonial-status role="status" aria-atomic="true"></p>
+            <button type="button" data-testimonial-next aria-label="Testimonio siguiente">→</button>
+          </div>
+        </div>
+      ) : <p class="testimonials__empty">Los testimonios se publicarán próximamente.</p>}
+    </div>
+  </Container>
+</section>
+
+<script>
+  import { initializeTestimonials } from '../features/testimonials/testimonials';
+  initializeTestimonials();
+  document.addEventListener('astro:page-load', initializeTestimonials);
+</script>
+
+<style>
+  .testimonials { padding-block: var(--space-6); scroll-margin-top: 7rem; }
+  .testimonials__frame { overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-medium); background: #080808; }
+  .testimonials__label { display: table; margin: 0; padding: var(--space-3) var(--space-6); background: #d4d4d8; color: #18181b; font: 600 .875rem/1.6 var(--font-mono); text-transform: uppercase; }
+  .testimonials__carousel { padding-block: var(--space-8); }
+  .testimonials__carousel:focus-visible { outline-offset: -5px; }
+  .testimonials__stage { display: grid; gap: 1.5rem; padding: 1.5rem; }
+  .testimonials__card { min-width: 0; width: min(22.75rem, 100%); margin-inline: auto; }
+  .testimonials__paper {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    min-height: 22.75rem;
+    padding: 1.75rem;
+    border: 1px solid var(--color-border);
+    background: #202023;
+    clip-path: polygon(0 0, calc(100% - 2.5rem) 0, 100% 2.5rem, 100% 100%, 0 100%);
+  }
+  .testimonials__paper::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('../assets/textures/grain.svg') repeat; background-size: 160px; opacity: .14; pointer-events: none; }
+  .testimonials__paper::after { content: ''; position: absolute; top: 0; right: 0; width: 2.5rem; height: 2.5rem; background: var(--color-border); clip-path: polygon(0 0, 0 100%, 100% 100%); }
+  .testimonials__avatar { display: grid; place-items: center; width: 3rem; height: 3.25rem; flex-shrink: 0; margin-bottom: 1.25rem; background: #d4d4d8; color: #18181b; font: 600 1rem var(--font-mono); }
+  blockquote { margin: 0 0 1.75rem; font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.55; overflow-wrap: anywhere; }
+  .testimonials__draft { margin-bottom: .75rem; color: var(--color-accent); font: .7rem/1.5 var(--font-mono); }
+  footer { display: grid; gap: .25rem; margin-top: auto; font-size: .8rem; }
+  footer strong { color: var(--color-accent); font-family: var(--font-mono); }
+  footer span { color: var(--color-text-muted); overflow-wrap: anywhere; }
+  .testimonials__controls:not([hidden]) { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem; }
+  .testimonials__controls button { width: 3.25rem; height: 3.25rem; border: 1px solid var(--color-border); background: #18181b; color: var(--color-text); font-size: 1.5rem; cursor: pointer; }
+  .testimonials__controls button:hover { border-color: var(--color-accent); color: var(--color-accent); }
+  .testimonials__controls p { min-width: 4rem; margin: 0; text-align: center; font: .8rem var(--font-mono); color: var(--color-text-muted); }
+  .testimonials__empty { padding: var(--space-8); margin: 0; color: var(--color-text-muted); text-align: center; }
+  [data-enhanced] .testimonials__stage { position: relative; display: block; height: var(--testimonial-height, 27rem); overflow: hidden; touch-action: pan-y; }
+  [data-enhanced] .testimonials__card { position: absolute; top: 50%; left: 50%; width: min(22.75rem, calc(100% - 3rem)); margin: 0; }
+  [data-enhanced] .testimonials__card[aria-hidden='false'] .testimonials__paper { border-color: var(--color-accent); }
+</style>

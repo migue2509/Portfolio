@@ -1,115 +1,145 @@
----
+﻿---
 import { Image } from "astro:assets";
 import MainLayout from "../../layouts/MainLayout.astro";
 import Container from "../../shared/layout/Container.astro";
 import { projects } from "../../data/projects";
+import { technologies } from "../../data/technologies";
+import githubMark from "../../assets/brand/github-mark.svg";
 import type { Project } from "../../features/projects/model/project";
 
 export function getStaticPaths() {
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project },
-  }));
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
 }
-
-interface Props {
-  project: Project;
-}
-
+interface Props { project: Project; }
 const { project } = Astro.props;
-
-const images = [
-  project.cover,
-  ...project.gallery.filter(
-    (image) => image.src.src !== project.cover.src.src,
-  ),
+const gallery = project.gallery.filter((image) => image.src.src !== project.cover.src.src);
+const tools = project.tools ?? project.technologies.map((id) => technologies[id].name);
+const catalog = Object.values(technologies);
+const details = [
+  { label: "Puesto", value: project.role },
+  { label: "Categoría", value: project.category },
+  { label: "Cliente", value: project.client },
 ];
 ---
 
-<MainLayout
-  title={`${project.title} | Miguel Ospina`}
-  description={project.summary}
->
+<MainLayout title={`${project.title} | Miguel Ospina`} description={project.summary} showHeader={false}>
   <main class="project-detail">
     <Container>
-      <a class="project-detail__back" href="/#proyectos">
-        ← Volver a proyectos
-      </a>
-
-      <header class="project-detail__header">
-        <h1>{project.title}</h1>
-        <p>{project.summary}</p>
-      </header>
-
-      <div class="project-detail__gallery">
-        {images.map((image, index) => (
-          <figure class="project-detail__figure">
-            <Image
-              src={image.src}
-              alt={image.alt}
-              widths={[480, 960, 1440]}
-              sizes="(min-width: 64rem) 960px, 90vw"
-              loading={index === 0 ? "eager" : "lazy"}
-              class="project-detail__image"
-            />
+      <article class="frame" aria-labelledby="project-title">
+        <a class="back grain-surface" href="/#proyectos"><span aria-hidden="true">←</span> Volver</a>
+        <header class="heading">
+          <div class="intro">
+            {(project.dateLabel || project.status) && <p class="meta">
+              {project.dateLabel && <span>{project.dateLabel}</span>}
+              {project.status && <span class="status">{project.status}</span>}
+            </p>}
+            <h1 id="project-title">{project.title}</h1>
+            <p class="summary">{project.summary}</p>
+            {project.tags?.length && <ul class="tags" aria-label="Tipo de proyecto">
+              {project.tags.map((tag) => <li>{tag}</li>)}
+            </ul>}
+          </div>
+          <aside class="info" aria-label="Ficha del proyecto">
+            <dl>
+              {details.filter((detail) => detail.value).map(({ label, value }) => (
+                <div class="field"><dt>{label}</dt><dd>{value}</dd></div>
+              ))}
+              {tools.length > 0 && <div class="field">
+                <dt>Herramientas</dt>
+                <dd><ul class="tools">
+                  {tools.map((name) => {
+                    const technology = catalog.find((item) => item.name === name);
+                    return <li>
+                      {technology?.icon && <Image src={technology.icon} alt="" width={20} height={20} loading="lazy" />}
+                      <span>{name}</span>
+                    </li>;
+                  })}
+                </ul></dd>
+              </div>}
+              {project.team && <div class="field"><dt>Equipo</dt><dd>{project.team}</dd></div>}
+            </dl>
+            {project.repositoryUrl && <a class="code grain-surface" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+              <img src={githubMark.src} width="16" height="16" alt="" />
+              Ver código <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+            </a>}
+          </aside>
+        </header>
+        <div class="cover-area">
+          <figure>
+            <Image src={project.cover.src} alt={project.cover.alt} widths={[480, 960, 1440]}
+              sizes="(min-width: 64rem) 960px, 85vw" loading="eager" fetchpriority="high" class="project-image" />
           </figure>
-        ))}
-      </div>
+        </div>
+        {project.problem && <section class="problem" aria-labelledby="problem-title">
+          <h2 id="problem-title">El problema</h2>
+          <p>{project.problem}</p>
+        </section>}
+        {gallery.length > 0 && <section class="gallery" aria-label="Capturas del proyecto">
+          {gallery.map((image) => <figure>
+            <Image src={image.src} alt={image.alt} widths={[480, 960, 1440]}
+              sizes="(min-width: 64rem) 960px, 85vw" loading="lazy" class="project-image" />
+          </figure>)}
+        </section>}
+      </article>
     </Container>
   </main>
 </MainLayout>
 
 <style>
-  .project-detail {
-    padding-block: var(--space-8) var(--space-16);
-  }
-
-  .project-detail__back {
-    display: inline-block;
-    padding-block: var(--space-2);
-    color: var(--color-accent);
-    font-family: var(--font-mono);
-    text-underline-offset: 0.25em;
-  }
-
-  .project-detail__header {
-    max-width: 60rem;
-    margin: var(--space-8) auto;
-  }
-
-  .project-detail__header h1 {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    line-height: 1.2;
-    overflow-wrap: anywhere;
-  }
-
-  .project-detail__header p {
-    max-width: 65ch;
-    margin: var(--space-4) 0 0;
-    color: var(--color-text-muted);
-  }
-
-  .project-detail__gallery {
-    display: grid;
-    gap: var(--space-8);
-    max-width: 60rem;
-    margin-inline: auto;
-  }
-
-  .project-detail__figure {
-    margin: 0;
+  .project-detail { padding-block: var(--space-6) var(--space-8); }
+  .frame {
     overflow: hidden;
-
     border: 1px solid var(--color-border);
     border-radius: var(--radius-medium);
-    background-color: #080808;
+    background: rgb(8 8 8 / 88%);
   }
-
-  .project-detail__image {
-    display: block;
-    width: 100%;
-    height: auto;
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    min-height: 44px;
+    padding: .5rem 1.25rem;
+    color: #18181b;
+    background: #d4d4d8;
+    text-decoration: none;
+  }
+  .back span { font-size: 1.5rem; line-height: 1; }
+  .heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding: var(--space-8) clamp(1.25rem, 5vw, 4rem) var(--space-12);
+  }
+  .intro { min-width: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0 0 .75rem; color: var(--color-text-muted); font: .75rem var(--font-mono); }
+  .status::before { content: ''; display: inline-block; width: .4rem; height: .4rem; margin-right: .4rem; border-radius: 50%; background: #39d353; }
+  h1 { margin: 0; font-family: var(--font-mono); font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; text-transform: uppercase; overflow-wrap: anywhere; }
+  .summary { max-width: 58ch; margin: var(--space-6) 0 0; color: var(--color-text-muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: .5rem; padding: 0; margin: var(--space-4) 0 0; list-style: none; }
+  .tags li { padding: .2rem .8rem; border-radius: 999px; background: rgb(147 197 253 / 18%); color: var(--color-accent); font: .75rem var(--font-mono); text-transform: uppercase; }
+  .info { min-width: 0; padding: 1.25rem; border: 1px solid var(--color-border); border-radius: 1.5rem; background: rgb(8 8 8 / 45%); }
+  dl { margin: 0; }
+  .field { padding-block: .5rem; border-bottom: 1px solid rgb(255 255 255 / 12%); }
+  .field:first-child { padding-top: 0; }
+  .field:last-child { border: 0; }
+  dt { color: var(--color-text-muted); font: .7rem var(--font-mono); }
+  dd { margin: .2rem 0 0; font: .875rem/1.5 var(--font-mono); overflow-wrap: anywhere; }
+  .tools { display: flex; flex-wrap: wrap; gap: .6rem .8rem; padding: 0; margin: .5rem 0 0; list-style: none; }
+  .tools li { display: inline-flex; align-items: center; gap: .3rem; font-size: .7rem; }
+  .tools img { flex-shrink: 0; object-fit: contain; }
+  .code { display: flex; align-items: center; justify-content: center; gap: .5rem; width: fit-content; min-height: 44px; margin: 1.25rem auto 0; padding: .5rem .75rem; border-radius: .2rem; background: #d4d4d8; color: #18181b; text-decoration: none; font: .8rem var(--font-mono); }
+  .cover-area { position: relative; isolation: isolate; padding: var(--space-8) clamp(1.25rem, 5vw, 4rem); border-block: 1px solid var(--color-border); }
+  .cover-area::before { content: ''; position: absolute; z-index: -1; inset: 0 0 30%; border-radius: 0 0 2rem 9rem; background: #050505; }
+  figure { max-width: 60rem; margin: 0 auto; overflow: hidden; border: 1px solid var(--color-border); border-radius: 1.25rem; background: #d4d4d8; }
+  .project-image { display: block; width: 100%; height: auto; }
+  .problem { padding: var(--space-6) clamp(1.25rem, 5vw, 4rem) var(--space-8); }
+  h2 { margin: 0; font: 600 clamp(1.25rem, 3vw, 1.75rem)/1.3 var(--font-mono); }
+  .problem p { max-width: 70ch; color: var(--color-text-muted); margin: var(--space-4) 0 0; }
+  .gallery { display: grid; gap: var(--space-8); padding: var(--space-8) clamp(1.25rem, 5vw, 4rem); }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (max-width: 47.99rem) {
+    .heading { grid-template-columns: minmax(0, 1fr); }
+    .info { border-radius: var(--radius-medium); }
   }
 </style>

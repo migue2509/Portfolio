@@ -8,6 +8,7 @@ export const projects = [
     slug: "tu-cancha",
     title: "Tu Cancha",
     summary: "Sistema de reserva de complejos deportivos.",
+    category: "Reservas deportivas",
     technologies: [],
     cover: {
       src: tucanchaCover,
@@ -18,7 +19,16 @@ export const projects = [
   {
     slug: "juan-chupe",
     title: "Juan Chupe Granizados ERP",
+    dateLabel: "Julio, 2026",
+    status: "Completado",
     summary: "Sistema ERP para Juan Chupe Granizados.",
+    category: "ERP",
+    role: "Desarrollador Full Stack freelance",
+    client: "Juan Chupe Granizados",
+    tags: ["ERP", "Full Stack"],
+    // Información documentada en la experiencia del CV.
+    tools: ["Python", "Django REST Framework", "PostgreSQL", "React", "Tailwind CSS", "Git", "GitHub"],
+    problem: "La gestión de inventario, caja y operación se llevaba en registros en papel. El arqueo de caja requería entre 60 y 90 minutos al cierre de la jornada.",
     technologies: [],
     cover: {
       src: juanChupeCover,
