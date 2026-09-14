@@ -6,6 +6,8 @@ import juanChupeCover from "../assets/projects/juan-chupe/cover.png";
 export const projects = [
   {
     slug: "tu-cancha",
+    repositoryUrl: "https://github.com/DilsiaLamadridTorres/APP_TuCancha",
+    liveUrl: "https://dilsialamadridtorres.github.io/APP_TuCancha/",
     title: "Tu Cancha",
     team: "Proyecto en Equipo",
     summary: "Sistema de reserva de complejos deportivos.",

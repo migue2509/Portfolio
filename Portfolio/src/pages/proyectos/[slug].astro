@@ -63,6 +63,7 @@ const details = [
               </div>}
               {project.team && <div class="field"><dt>Equipo</dt><dd>{project.team}</dd></div>}
             </dl>
+            <div class="info-actions">
             {project.repositoryUrl ? <a class="code grain-surface" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
               <img src={githubMark.src} width="16" height="16" alt="" />
               Ver código <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
@@ -70,6 +71,10 @@ const details = [
               <img src={githubMark.src} width="16" height="16" alt="" />
               Ver código <span aria-hidden="true">↗</span><span class="sr-only"> (enlace pendiente)</span>
             </button>}
+            {project.liveUrl && <a class="code grain-surface" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+              Ver demo <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+            </a>}
+            </div>
           </aside>
         </header>
         <div class="cover-area">
@@ -174,6 +179,8 @@ const details = [
   .code { display: flex; align-items: center; justify-content: center; gap: .5rem; width: fit-content; min-height: 44px; margin: 1.25rem auto 0; padding: .5rem .75rem; border-radius: .2rem; background: #d4d4d8; color: #18181b; text-decoration: none; font: .8rem var(--font-mono); }
   .cover-area { position: relative; isolation: isolate; padding: var(--space-8) clamp(1.25rem, 5vw, 4rem); border-block: 1px solid var(--color-border); }
   button.code { border: 0; }
+  .info-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: 1.25rem; }
+  .info-actions .code { margin: 0; }
   .code:disabled { opacity: .65; cursor: not-allowed; }
   .cover-area::before { content: ''; position: absolute; z-index: -1; inset: 0 0 30%; border-radius: 0 0 2rem 9rem; background: #050505; }
   figure { max-width: 60rem; margin: 0 auto; overflow: hidden; border: 1px solid var(--color-border); border-radius: 1.25rem; background: #d4d4d8; }
