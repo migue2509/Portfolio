@@ -44,14 +44,14 @@ const { cvUrl = localCvExists ? "/documents/miguel-ospina-cv.pdf" : undefined } 
 
         <div class="hero__actions">
           {cvUrl ? (
-            <a class="hero__cv" href={cvUrl} download="miguel-ospina-cv.pdf" data-cv-download>
+            <a class="hero__cv grain-surface" href={cvUrl} download="miguel-ospina-cv.pdf" data-cv-download>
               <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true">
                 <path d="M7 1h2v7l2-2 1.4 1.4L8 11.8 3.6 7.4 5 6l2 2V1ZM3 13h10v2H3v-2Z" />
               </svg>
               Descargar CV
             </a>
           ) : (
-            <button class="hero__cv" type="button" disabled title="CV próximamente" aria-label="Descargar CV, próximamente">
+            <button class="hero__cv grain-surface" type="button" disabled title="CV próximamente" aria-label="Descargar CV, próximamente">
               <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true">
                 <path d="M7 1h2v7l2-2 1.4 1.4L8 11.8 3.6 7.4 5 6l2 2V1ZM3 13h10v2H3v-2Z" />
               </svg>

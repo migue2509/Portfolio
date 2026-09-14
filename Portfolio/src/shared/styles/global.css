@@ -56,3 +56,23 @@ select {
   background-color: var(--color-accent);
   color: var(--color-background);
 }
+
+/* Grano reutilizable para superficies claras, por debajo del contenido. */
+.grain-surface {
+  position: relative;
+  isolation: isolate;
+}
+
+.grain-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: url("../../assets/textures/grain.svg");
+  background-size: 160px 160px;
+  background-repeat: repeat;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}

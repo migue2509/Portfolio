@@ -8,7 +8,7 @@ const entries: readonly Experience[] = experiences;
 <section id="experiencia" class="experience" aria-labelledby="experience-title" data-experience>
   <Container>
     <div class="experience__frame">
-      <h2 id="experience-title" class="experience__label">Experiencia</h2>
+      <h2 id="experience-title" class="experience__label grain-surface">Experiencia</h2>
 
       <div class="experience__timeline" data-experience-timeline>
         <span class="experience__track" aria-hidden="true">
@@ -169,6 +169,8 @@ const entries: readonly Experience[] = experiences;
   }
 
   .experience__card {
+    position: relative;
+    isolation: isolate;
     display: grid;
     gap: 1.25rem;
     min-width: 0;
@@ -178,6 +180,24 @@ const entries: readonly Experience[] = experiences;
     background-color: #18181b;
     background-image: linear-gradient(135deg, rgb(255 255 255 / 3%), transparent 65%);
     box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+  }
+
+  .experience__card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background-image: url("../assets/textures/grain.svg");
+    background-repeat: repeat;
+    background-size: 160px 160px;
+    opacity: 0.14;
+    pointer-events: none;
+  }
+
+  .experience__card > * {
+    position: relative;
+    z-index: 1;
   }
 
   .experience__identity {
