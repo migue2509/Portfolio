@@ -8,6 +8,7 @@ const links = [
   { id: "proyectos", label: "Proyectos" },
   { id: "sobre-mi", label: "Sobre mí" },
   { id: "experiencia", label: "Experiencia" },
+  { id: "por-que-elegirme", label: "¿Por qué elegirme?" },
 ];
 ---
 
@@ -33,9 +34,6 @@ const links = [
           {link.label}
         </a>
       ))}
-      <span class="header__link header__link--disabled" role="link" aria-disabled="true" title="Sección próximamente">
-        ¿Por qué elegirme?
-      </span>
       <a class="header__link header__contact" href={contact.href}>
         Trabaja conmigo
       </a>
@@ -226,7 +224,8 @@ const links = [
 
   :global(#proyectos),
   :global(#sobre-mi),
-  :global(#experiencia) {
+  :global(#experiencia),
+  :global(#por-que-elegirme) {
     scroll-margin-top: 7rem;
   }
 
