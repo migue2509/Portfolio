@@ -1,9 +1,10 @@
-import type { ImageMetadata } from 'astro';
 import type { ProjectImage } from '../features/projects/model/project';
+import inicio from '../assets/projects/tu-cancha/gallery/inicio.png';
+import canchas from '../assets/projects/tu-cancha/gallery/canchas.png';
+import nosotros from '../assets/projects/tu-cancha/gallery/nosotros.png';
+import contacto from '../assets/projects/tu-cancha/gallery/contacto.png';
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/projects/tu-cancha/gallery/*.png', { eager: true },
-);
+const images = { 'inicio.png': inicio, 'canchas.png': canchas, 'nosotros.png': nosotros, 'contacto.png': contacto };
 
 const entries = [
   {
@@ -30,9 +31,8 @@ const entries = [
     description: 'Centraliza la información de ayuda, soporte y comunicación con los usuarios.',
     highlights: ['Ayuda relacionada con reservas', 'Acceso al registro de complejos', 'Preguntas frecuentes', 'Dudas, sugerencias y reclamos', 'Formulario de contacto'],
   },
-];
+] as const;
 
-export const tuCanchaGallery: readonly ProjectImage[] = entries.flatMap(({ file, ...entry }) => {
-  const image = images[`../assets/projects/tu-cancha/gallery/${file}`];
-  return image ? [{ ...entry, src: image.default }] : [];
-});
+export const tuCanchaGallery: readonly ProjectImage[] = entries.map(({ file, ...entry }) => ({
+  ...entry, src: images[file],
+}));
