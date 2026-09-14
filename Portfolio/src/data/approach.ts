@@ -1,27 +1,27 @@
 export const approachSteps = [
   {
-    title: "Entiendo el problema",
-    description: "Escucho, aclaro los requerimientos y entiendo el proceso antes de proponer una solución.",
+    title: "Entender antes de construir",
+    description: "Primero busco comprender el problema, el contexto y lo que realmente necesita la solución antes de empezar a desarrollar.",
     icon: "01",
   },
   {
-    title: "Diseño con intención",
-    description: "Organizo las ideas y diseño interfaces en Figma para que cada pantalla tenga un propósito claro.",
+    title: "Tomar decisiones con criterio",
+    description: "No se trata de usar más tecnologías, sino de elegir las que tienen sentido para el problema y poder justificar cada decisión.",
     icon: "02",
   },
   {
-    title: "Construyo paso a paso",
-    description: "Divido el trabajo, cuido la estructura del código y comparto avances para construir en equipo.",
+    title: "Construir para que evolucione",
+    description: "Busco soluciones claras, organizadas y mantenibles que puedan crecer sin convertir cada cambio en un problema.",
     icon: "03",
   },
   {
-    title: "Pruebo y ajusto",
-    description: "Valido las APIs y la lógica, reviso los detalles y aprovecho la retroalimentación para mejorar.",
+    title: "Pensar en el resultado",
+    description: "El código es el medio. Mi objetivo es que lo construido simplifique un proceso, resuelva una necesidad o genere un impacto concreto.",
     icon: "04",
   },
   {
-    title: "Busco impacto real",
-    description: "Me enfoco en reducir tareas manuales, simplificar procesos y resolver necesidades de las personas.",
+    title: "Aprender y colaborar",
+    description: "Me interesa recibir feedback, comunicar decisiones y seguir aprendiendo mientras construyo junto a otras personas.",
     icon: "05",
   },
 ] as const;
