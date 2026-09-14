@@ -1,8 +1,5 @@
 ---
 import Signature from "../brand/Signature.astro";
-import { socialLinks } from "../../data/social-links";
-
-const contact = socialLinks.find((link) => link.id === "email")!;
 const projectDetail = Astro.url.pathname.startsWith("/proyectos/");
 const links = [
   { id: "proyectos", label: "Proyectos" },
@@ -34,7 +31,7 @@ const links = [
           {link.label}
         </a>
       ))}
-      <a class="header__link header__contact" href={contact.href}>
+      <a class="header__link header__contact" href="/#contacto" data-section-link="contacto">
         Trabaja conmigo
       </a>
     </div>
@@ -225,7 +222,8 @@ const links = [
   :global(#proyectos),
   :global(#sobre-mi),
   :global(#experiencia),
-  :global(#por-que-elegirme) {
+  :global(#por-que-elegirme),
+  :global(#contacto) {
     scroll-margin-top: 7rem;
   }
 

@@ -1,0 +1,245 @@
+---
+import { Image } from "astro:assets";
+import Container from "../shared/layout/Container.astro";
+import SocialLinks from "../shared/brand/SocialLinks.astro";
+import Signature from "../shared/brand/Signature.astro";
+import portrait from "../assets/profile/icon.png";
+import { socialLinks } from "../data/social-links";
+
+const contact = socialLinks.find((link) => link.id === "email")!;
+const formspreeEndpoint = (import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? "").trim();
+if (formspreeEndpoint && !/^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+\/?$/.test(formspreeEndpoint)) {
+  throw new Error("PUBLIC_FORMSPREE_ENDPOINT debe ser la URL https://formspree.io/f/ de tu formulario.");
+}
+const year = new Date().getFullYear();
+---
+
+<section id="contacto" class="contact" aria-labelledby="contact-title">
+  <Container>
+    <div class="contact__frame">
+      <h2 id="contact-title" class="contact__label grain-surface">Trabaja conmigo</h2>
+
+      <div class="contact__layout">
+        <div class="contact__intro">
+          <h3>¿Listo para<br />construir algo<br /><span>grande</span>?</h3>
+          <Image src={portrait} alt="Retrato ilustrado de Miguel Ospina" widths={[96, 192]} sizes="96px" loading="lazy" class="contact__portrait" />
+          <div class="contact__social"><SocialLinks /></div>
+        </div>
+
+        <form class="contact__form" action={formspreeEndpoint || undefined} method="post" data-contact-form aria-describedby="contact-help">
+          <div class="contact__field">
+            <label for="contact-name">Nombre</label>
+            <div class="contact__input-surface grain-surface">
+              <input id="contact-name" name="name" autocomplete="name" maxlength="100" required />
+            </div>
+          </div>
+          <div class="contact__field">
+            <label for="contact-email">Email</label>
+            <div class="contact__input-surface grain-surface">
+              <input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required />
+            </div>
+          </div>
+          <div class="contact__field">
+            <label for="contact-subject">Título del mensaje</label>
+            <div class="contact__input-surface grain-surface">
+              <input id="contact-subject" name="subject" maxlength="140" required />
+            </div>
+          </div>
+          <div class="contact__field">
+            <label for="contact-message">Mensaje</label>
+            <div class="contact__input-surface contact__input-surface--message grain-surface">
+              <textarea id="contact-message" name="message" rows="4" maxlength="2000" required></textarea>
+            </div>
+          </div>
+          <button type="submit" class="contact__send" disabled={!formspreeEndpoint}>Enviar</button>
+          <p id="contact-help" class="contact__help">
+            {formspreeEndpoint ? "También puedes " : "Por ahora puedes "}<a href={contact.href}>escribirme por correo</a>.
+          </p>
+          <p class="contact__status" role="status" aria-live="polite" aria-atomic="true" data-contact-status></p>
+        </form>
+      </div>
+
+      <footer class="contact__footer">
+        <div class="contact__credits">
+          <Signature />
+          <p>© {year} Miguel Ospina. Todos los derechos reservados.</p>
+        </div>
+        <a href="#inicio" class="contact__top" aria-label="Volver al inicio" data-back-to-top>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6" /></svg>
+        </a>
+        <p class="contact__name" aria-label="Miguel Ospina">Miguel Ospina</p>
+      </footer>
+    </div>
+  </Container>
+</section>
+
+<script>
+  import { initializeContact } from "../features/contact/contact";
+  initializeContact();
+  document.addEventListener("astro:page-load", initializeContact);
+</script>
+
+<style>
+  .contact {
+    padding-block: var(--space-12) var(--space-8);
+    scroll-margin-top: 7rem;
+  }
+  .contact__frame {
+    border: 1px solid var(--color-border);
+    background: rgb(8 8 8 / 82%);
+  }
+  .contact__label {
+    display: table;
+    margin: 0;
+    padding: var(--space-3) var(--space-6);
+    background: #d4d4d8;
+    color: #18181b;
+    font: 600 0.875rem/1.6 var(--font-mono);
+    text-transform: uppercase;
+  }
+  .contact__layout {
+    display: grid;
+    gap: 2rem;
+    max-width: 58rem;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1rem, 4vw, 3rem);
+  }
+  .contact__intro {
+    min-width: 0;
+    text-align: center;
+  }
+  .contact__intro h3 {
+    margin: 0;
+    font: 800 clamp(1.75rem, 3.4vw, 2.75rem)/1.12 var(--font-mono);
+    letter-spacing: -0.04em;
+  }
+  .contact__intro h3 span { color: var(--color-accent); }
+  .contact__portrait {
+    display: block;
+    width: 6rem;
+    height: auto;
+    margin: 1.5rem auto 0.75rem;
+  }
+  .contact__social {
+    display: table;
+    margin-inline: auto;
+    padding: 0.125rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: #303033;
+  }
+  .contact__social :global(.social-links) { gap: 0; }
+  .contact__social :global(.social-links__link) {
+    border-color: transparent;
+    border-radius: 50%;
+    background: transparent;
+  }
+  .contact__social :global(.social-links__link:focus-visible) { outline-offset: -3px; }
+  .contact__form {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    min-width: 0;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border: 1px solid rgb(255 255 255 / 5%);
+    border-radius: 0.75rem;
+    background: #1c1c1f;
+  }
+  .contact__form::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: url("../assets/textures/grain.svg") repeat;
+    background-size: 160px 160px;
+    opacity: 0.14;
+    pointer-events: none;
+  }
+  .contact__field { display: grid; gap: 0.25rem; min-width: 0; }
+  .contact__field label { font: 0.75rem/1.5 var(--font-mono); color: #e4e4e7; }
+  .contact__input-surface {
+    border: 1px solid #e4e4e7;
+    border-radius: 999px;
+    background: #c4c4c6;
+  }
+  .contact__input-surface--message { border-radius: 1rem; }
+  .contact__input-surface:focus-within {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+  .contact__field input,
+  .contact__field textarea {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.875rem;
+    border: 0;
+    border-radius: inherit;
+    outline: none;
+    background: transparent;
+    color: #18181b;
+    caret-color: #18181b;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .contact__field textarea { min-height: 7rem; resize: vertical; }
+  .contact__send {
+    justify-self: end;
+    min-height: 2.75rem;
+    padding: 0.375rem 1.125rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 999px;
+    background: rgb(147 197 253 / 10%);
+    color: var(--color-accent);
+    font: 700 0.875rem/1.4 var(--font-mono);
+    cursor: pointer;
+  }
+  .contact__send:hover { background: rgb(147 197 253 / 20%); }
+  .contact__send:disabled { opacity: 0.55; cursor: not-allowed; }
+  .contact__status[data-state="error"] { color: #fca5a5; }
+  .contact__status[data-state="success"] { color: #86efac; }
+  .contact__help, .contact__status { margin: 0; font-size: 0.75rem; line-height: 1.5; color: var(--color-text-muted); }
+  .contact__help a, .contact__status { color: var(--color-accent); }
+  .contact__status:empty { display: none; }
+  .contact__footer {
+    margin-inline: clamp(1rem, 3vw, 2rem);
+    padding: 0.75rem 0 2rem;
+    border-top: 1px solid rgb(147 197 253 / 35%);
+  }
+  .contact__credits { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+  .contact__credits :global(.signature) { width: 3rem; height: 1.25rem; flex-shrink: 0; }
+  .contact__credits p { margin: 0; color: var(--color-text-muted); font: 0.6875rem/1.6 var(--font-mono); }
+  .contact__top {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 1.25rem auto 0;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    background: #79a8d5;
+    color: #080808;
+  }
+  .contact__top:hover { background: var(--color-accent); }
+  .contact__name {
+    margin: 2.25rem 0 0;
+    text-align: center;
+    color: #fafafa;
+    font: 900 clamp(1.5rem, 7vw, 6rem)/1.1 Georgia, "Times New Roman", serif;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 48rem) {
+    .contact__layout { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 2.5rem; }
+    .contact__intro { text-align: left; padding-top: 0.5rem; }
+    .contact__portrait { margin-inline: 0; }
+    .contact__social { margin-inline: 0; }
+    .contact__credits { justify-content: flex-end; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .contact__send, .contact__top { transition: background-color 180ms ease; }
+  }
+</style>

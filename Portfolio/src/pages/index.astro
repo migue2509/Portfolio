@@ -5,17 +5,19 @@ import Projects from "../sections/Projects.astro";
 import About from "../sections/About.astro";
 import Experience from "../sections/Experience.astro";
 import WhyMe from "../sections/WhyMe.astro";
+import Contact from "../sections/Contact.astro";
 ---
 
 <MainLayout
   title="Miguel Ospina | Desarrollador Full Stack"
   description="Portafolio de Miguel Ospina: proyectos, experiencia y desarrollo de aplicaciones con Java, Spring Boot y tecnologías web."
 >
-  <main>
+  <main id="inicio" tabindex="-1">
     <Hero />
     <Projects />
     <About />
     <Experience />
     <WhyMe />
+    <Contact />
   </main>
 </MainLayout>
