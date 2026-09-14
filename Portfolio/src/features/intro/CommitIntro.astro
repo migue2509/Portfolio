@@ -43,15 +43,19 @@ const columns = Array.from({ length: 50 }, (_, column) => cells.filter((cell) =>
       }
     };
     dialog.addEventListener('intro:finish', finish, { signal: events.signal });
+    dialog.addEventListener('intro:ready', () => {
+      clearTimeout(timer);
+      timer = setTimeout(finish, 3500);
+    }, { once: true, signal: events.signal });
     dialog.addEventListener('cancel', (event) => { event.preventDefault(); finish(); }, { signal: events.signal });
     dialog.querySelector('[data-intro-skip]').addEventListener('click', finish, { signal: events.signal });
     document.addEventListener('astro:before-swap', finish, { signal: events.signal });
     motion.addEventListener('change', finish, { signal: events.signal });
     try {
       dialog.showModal();
-      dialog.dataset.startedAt = String(performance.now());
+      document.dispatchEvent(new Event('intro:mounted'));
       dialog.querySelector('[data-intro-skip]').focus({ preventScroll: true });
-      timer = setTimeout(finish, 3000);
+      timer = setTimeout(finish, 4000);
     } catch { finish(); }
   })();
 </script>

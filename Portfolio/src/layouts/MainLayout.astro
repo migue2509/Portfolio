@@ -32,7 +32,15 @@ const { title, description, intro = false, showHeader = true } = Astro.props;
           if (matchMedia('(prefers-reduced-motion: reduce)').matches || sessionStorage.getItem('portfolio:intro-seen')) return;
           sessionStorage.setItem('portfolio:intro-seen', '1');
           document.documentElement.classList.add('intro-pending');
-          setTimeout(() => document.documentElement.classList.remove('intro-pending'), 4000);
+          const release = () => {
+            clearTimeout(fallback);
+            document.removeEventListener('intro:mounted', release);
+          };
+          const fallback = setTimeout(() => {
+            release();
+            document.documentElement.classList.remove('intro-pending');
+          }, 4000);
+          document.addEventListener('intro:mounted', release, { once: true });
         } catch { /* Si el almacenamiento está bloqueado, mostramos el sitio directamente. */ }
       })();
     </script>}
