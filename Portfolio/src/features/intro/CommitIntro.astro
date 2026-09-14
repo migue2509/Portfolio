@@ -1,0 +1,100 @@
+---
+import { cells } from './pattern';
+---
+
+<dialog class="commit-intro" data-commit-intro aria-label="Introducción: HEY!!">
+  <div class="commit-intro__composition" data-intro-composition>
+    <p class="commit-intro__status" role="status" aria-live="polite" data-intro-status>Committing...</p>
+    <div class="commit-intro__grid" aria-hidden="true">
+      {cells.map(({ lit, column, row, tone }) => (
+        <span class="commit-intro__cell">
+          {lit && <span data-intro-pixel data-column={column} data-row={row} class={`commit-intro__pixel commit-intro__pixel--${tone}`} />}
+        </span>
+      ))}
+    </div>
+  </div>
+  <button class="commit-intro__skip" type="button" data-intro-skip autofocus>Omitir introducción</button>
+</dialog>
+
+<!-- Arranca sin esperar al bundle; Escape y el botón funcionan aunque GSAP falle. -->
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const dialog = document.querySelector('[data-commit-intro]');
+    if (!dialog) return;
+    if (!root.classList.contains('intro-pending')) { dialog.remove(); return; }
+    const previousFocus = document.activeElement;
+    const events = new AbortController();
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let timer;
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      events.abort();
+      root.classList.remove('intro-pending');
+      if (dialog.open) dialog.close();
+      dialog.dispatchEvent(new Event('intro:finished'));
+      dialog.remove();
+      if (previousFocus instanceof HTMLElement && previousFocus !== document.body && previousFocus.isConnected) {
+        previousFocus.focus({ preventScroll: true });
+      }
+    };
+    dialog.addEventListener('intro:finish', finish, { signal: events.signal });
+    dialog.addEventListener('cancel', (event) => { event.preventDefault(); finish(); }, { signal: events.signal });
+    dialog.querySelector('[data-intro-skip]').addEventListener('click', finish, { signal: events.signal });
+    document.addEventListener('astro:before-swap', finish, { signal: events.signal });
+    motion.addEventListener('change', finish, { signal: events.signal });
+    try {
+      dialog.showModal();
+      timer = setTimeout(finish, 3500);
+    } catch { finish(); }
+  })();
+</script>
+
+<script>
+  import { initializeIntro } from './intro';
+  initializeIntro();
+</script>
+
+<style>
+  .commit-intro {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 1rem;
+    border: 0;
+    background: #000;
+    color: #f0f6fc;
+    font-family: var(--font-mono);
+  }
+  .commit-intro[open] { display: grid; place-content: center; }
+  .commit-intro::backdrop { background: transparent; }
+  .commit-intro__composition { width: min(56rem, calc(100vw - 2rem)); }
+  .commit-intro__status { margin: 0 0 1.5rem; text-align: center; font-size: clamp(.875rem, 3vw, 1rem); }
+  .commit-intro__grid { display: grid; grid-template-columns: repeat(50, minmax(0, 1fr)); gap: clamp(1px, .35vw, 4px); }
+  .commit-intro__cell { position: relative; aspect-ratio: 1; border-radius: 2px; background: #101913; overflow: hidden; }
+  .commit-intro__pixel { position: absolute; inset: 0; background: #39d353; opacity: 0; }
+  .commit-intro__pixel--1 { background: #2fbb4e; }
+  .commit-intro__pixel--2 { background: #4ae168; }
+  .commit-intro__skip {
+    position: absolute;
+    bottom: max(2rem, env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    min-height: 44px;
+    padding: .5rem 1rem;
+    border: 1px solid #536459;
+    border-radius: .375rem;
+    background: #101913;
+    color: #f0f6fc;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .commit-intro__skip:focus-visible { outline: 2px solid #39d353; outline-offset: 4px; }
+</style>

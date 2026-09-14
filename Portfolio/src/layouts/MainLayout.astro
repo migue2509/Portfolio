@@ -2,14 +2,16 @@
 import "@fontsource-variable/geist/wght.css";
 import "@fontsource-variable/geist-mono/wght.css";
 import Header from "../shared/layout/Header.astro";
+import CommitIntro from "../features/intro/CommitIntro.astro";
 import "../shared/styles/global.css";
 
 interface Props {
   title: string;
   description: string;
+  intro?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, intro = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -19,9 +21,25 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    {intro && <script is:inline>
+      (() => {
+        try {
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches || sessionStorage.getItem('portfolio:intro-seen')) return;
+          sessionStorage.setItem('portfolio:intro-seen', '1');
+          document.documentElement.classList.add('intro-pending');
+          setTimeout(() => document.documentElement.classList.remove('intro-pending'), 4000);
+        } catch { /* Si el almacenamiento está bloqueado, mostramos el sitio directamente. */ }
+      })();
+    </script>}
+    <style is:global>
+      html.intro-pending { overflow: hidden; }
+      html.intro-pending::before { content: ''; position: fixed; inset: 0; z-index: 9999; background: #000; pointer-events: none; }
+      html.intro-pending:has(dialog[open])::before { display: none; }
+    </style>
   </head>
 
  <body class="site-body">
+  {intro && <CommitIntro />}
   <Header />
   <slot />
 </body>
