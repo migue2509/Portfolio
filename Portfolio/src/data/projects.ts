@@ -8,8 +8,10 @@ export const projects = [
     slug: "tu-cancha",
     title: "Tu Cancha",
     summary: "Sistema de reserva de complejos deportivos.",
-    category: "Reservas deportivas",
-    technologies: [],
+    role: "Desarrollador Full Stack | Líder Técnico",
+    category: "Sistema de Reservas",
+    client: "Proyecto académico — Generation Colombia",
+    technologies: ["html", "css", "javascript", "trello", "figma", "java", "springBoot", "postman"],
     cover: {
       src: tucanchaCover,
       alt: "Vista del inicio de Tu Cancha",

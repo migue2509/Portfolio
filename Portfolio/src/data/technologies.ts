@@ -9,6 +9,8 @@ import gitIcon from "../assets/technologies/git.png";
 import vscodeIcon from "../assets/technologies/vscode.png";
 import intellijIcon from "../assets/technologies/intellij.png";
 import figmaIcon from "../assets/technologies/figma.png";
+import trelloIcon from "../assets/technologies/trello.png";
+import postmanIcon from "../assets/technologies/postman.svg";
 
 export const technologies = {
   html: { name: "HTML", icon: htmlIcon },
@@ -22,7 +24,8 @@ export const technologies = {
   vscode: { name: "VS Code", icon: vscodeIcon },
   intellij: { name: "IntelliJ IDEA", icon: intellijIcon },
   figma: { name: "Figma", icon: figmaIcon },
-  postman: { name: "Postman", icon: null },
+  trello: { name: "Trello", icon: trelloIcon },
+  postman: { name: "Postman", icon: postmanIcon },
 } as const;
 
 export type TechnologyId = keyof typeof technologies;
