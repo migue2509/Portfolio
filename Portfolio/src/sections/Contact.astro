@@ -7,7 +7,7 @@ import portrait from "../assets/profile/icon.png";
 import { socialLinks } from "../data/social-links";
 
 const contact = socialLinks.find((link) => link.id === "email")!;
-const formspreeEndpoint = (import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? "").trim();
+const formspreeEndpoint = (import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? "https://formspree.io/f/xaeyglpo").trim();
 if (formspreeEndpoint && !/^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+\/?$/.test(formspreeEndpoint)) {
   throw new Error("PUBLIC_FORMSPREE_ENDPOINT debe ser la URL https://formspree.io/f/ de tu formulario.");
 }
