@@ -7,6 +7,7 @@ const projectDetail = Astro.url.pathname.startsWith("/proyectos/");
 const links = [
   { id: "proyectos", label: "Proyectos" },
   { id: "sobre-mi", label: "Sobre mí" },
+  { id: "experiencia", label: "Experiencia" },
 ];
 ---
 
@@ -32,9 +33,6 @@ const links = [
           {link.label}
         </a>
       ))}
-      <span class="header__link header__link--disabled" role="link" aria-disabled="true" title="Sección próximamente">
-        Experiencia
-      </span>
       <span class="header__link header__link--disabled" role="link" aria-disabled="true" title="Sección próximamente">
         ¿Por qué elegirme?
       </span>
@@ -227,7 +225,8 @@ const links = [
   }
 
   :global(#proyectos),
-  :global(#sobre-mi) {
+  :global(#sobre-mi),
+  :global(#experiencia) {
     scroll-margin-top: 7rem;
   }
 
