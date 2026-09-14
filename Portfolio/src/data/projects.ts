@@ -7,6 +7,7 @@ export const projects = [
   {
     slug: "tu-cancha",
     title: "Tu Cancha",
+    team: "Proyecto en Equipo",
     summary: "Sistema de reserva de complejos deportivos.",
     role: "Desarrollador Full Stack | Líder Técnico",
     category: "Sistema de Reservas",
@@ -21,6 +22,7 @@ export const projects = [
   {
     slug: "juan-chupe",
     title: "Juan Chupe Granizados ERP",
+    team: "Proyecto Individual",
     dateLabel: "Julio, 2026",
     status: "Completado",
     summary: "Sistema ERP para Juan Chupe Granizados.",
