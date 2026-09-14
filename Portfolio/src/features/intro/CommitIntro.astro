@@ -1,17 +1,18 @@
 ---
 import { cells } from './pattern';
+const columns = Array.from({ length: 50 }, (_, column) => cells.filter((cell) => cell.lit && cell.column === column)).filter((column) => column.length);
 ---
 
 <dialog class="commit-intro" data-commit-intro aria-label="Introducción: HEY!!">
   <div class="commit-intro__composition" data-intro-composition>
     <p class="commit-intro__status" role="status" aria-live="polite" data-intro-status>Committing...</p>
-    <div class="commit-intro__grid" aria-hidden="true">
-      {cells.map(({ lit, column, row, tone }) => (
-        <span class="commit-intro__cell">
-          {lit && <span data-intro-pixel data-column={column} data-row={row} class={`commit-intro__pixel commit-intro__pixel--${tone}`} />}
-        </span>
-      ))}
-    </div>
+    <svg class="commit-intro__grid" viewBox="0 0 898 124" width="898" height="124" aria-hidden="true" focusable="false">
+      <defs><pattern id="intro-cells" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="16" height="16" rx="2" fill="#101913" /></pattern></defs>
+      <rect width="898" height="124" fill="url(#intro-cells)" />
+      {columns.map((column) => <g data-intro-column opacity="0">
+        {column.map((cell) => <rect x={cell.column * 18} y={cell.row * 18} width="16" height="16" rx="2" fill={['#39d353', '#2fbb4e', '#4ae168'][cell.tone]} />)}
+      </g>)}
+    </svg>
   </div>
   <button class="commit-intro__skip" type="button" data-intro-skip>Omitir introducción</button>
 </dialog>
@@ -48,8 +49,9 @@ import { cells } from './pattern';
     motion.addEventListener('change', finish, { signal: events.signal });
     try {
       dialog.showModal();
+      dialog.dataset.startedAt = String(performance.now());
       dialog.querySelector('[data-intro-skip]').focus({ preventScroll: true });
-      timer = setTimeout(finish, 3500);
+      timer = setTimeout(finish, 3000);
     } catch { finish(); }
   })();
 </script>
@@ -76,13 +78,9 @@ import { cells } from './pattern';
   }
   .commit-intro[open] { display: grid; place-content: center; }
   .commit-intro::backdrop { background: transparent; }
-  .commit-intro__composition { width: min(56rem, calc(100vw - 2rem)); }
+  .commit-intro__composition { width: min(56rem, calc(100vw - 2rem)); contain: layout paint; }
   .commit-intro__status { margin: 0 0 1.5rem; text-align: center; font-size: clamp(.875rem, 3vw, 1rem); }
-  .commit-intro__grid { display: grid; grid-template-columns: repeat(50, minmax(0, 1fr)); gap: clamp(1px, .35vw, 4px); }
-  .commit-intro__cell { position: relative; aspect-ratio: 1; border-radius: 2px; background: #101913; overflow: hidden; }
-  .commit-intro__pixel { position: absolute; inset: 0; background: #39d353; opacity: 0; }
-  .commit-intro__pixel--1 { background: #2fbb4e; }
-  .commit-intro__pixel--2 { background: #4ae168; }
+  .commit-intro__grid { display: block; width: 100%; height: auto; }
   .commit-intro__skip {
     position: absolute;
     bottom: max(2rem, env(safe-area-inset-bottom));
