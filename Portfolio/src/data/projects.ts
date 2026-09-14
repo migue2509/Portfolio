@@ -1,4 +1,5 @@
 import type { Project } from "../features/projects/model/project";
+import { tuCanchaContent } from "./tu-cancha-content";
 
 import tucanchaCover from "../assets/projects/tu-cancha/cover.png";
 import juanChupeCover from "../assets/projects/juan-chupe/cover.png";
@@ -6,6 +7,7 @@ import juanChupeCover from "../assets/projects/juan-chupe/cover.png";
 export const projects = [
   {
     slug: "tu-cancha",
+    ...tuCanchaContent,
     repositoryUrl: "https://github.com/DilsiaLamadridTorres/APP_TuCancha",
     liveUrl: "https://dilsialamadridtorres.github.io/APP_TuCancha/",
     title: "Tu Cancha",

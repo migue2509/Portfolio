@@ -4,6 +4,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import Container from "../../shared/layout/Container.astro";
 import Footer from "../../shared/layout/Footer.astro";
 import ResultGallery from "../../features/projects/ResultGallery.astro";
+import ProjectText from "../../features/projects/ProjectText.astro";
 import { projects } from "../../data/projects";
 import { technologies } from "../../data/technologies";
 import githubMark from "../../assets/brand/github-mark.svg";
@@ -14,7 +15,7 @@ export function getStaticPaths() {
 }
 interface Props { project: Project; }
 const { project } = Astro.props;
-const challengeImage = project.challengeImage ?? project.cover;
+const challengeImage = project.challengeImage;
 const projectIndex = projects.findIndex((item) => item.slug === project.slug);
 const nextProject = projects.length > 1 ? projects[(projectIndex + 1) % projects.length] : undefined;
 const gallery = project.gallery.filter((image) => image.src.src !== project.cover.src.src);
@@ -39,7 +40,7 @@ const details = [
               {project.status && <span class="status">{project.status}</span>}
             </p>}
             <h1 id="project-title">{project.title}</h1>
-            <p class="summary">{project.summary}</p>
+            <div class="summary"><ProjectText text={project.introduction ?? project.summary} /></div>
             {project.tags?.length && <ul class="tags" aria-label="Tipo de proyecto">
               {project.tags.map((tag) => <li>{tag}</li>)}
             </ul>}
@@ -72,6 +73,7 @@ const details = [
               Ver código <span aria-hidden="true">↗</span><span class="sr-only"> (enlace pendiente)</span>
             </button>}
             {project.liveUrl && <a class="code grain-surface" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" /><path d="M8 21h8m-4-4v4" /></svg>
               Ver demo <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
             </a>}
             </div>
@@ -85,27 +87,37 @@ const details = [
         </div>
         <section class="detail-section" aria-labelledby="challenge-title">
           <h2 id="challenge-title">El reto</h2>
-          {project.problem && <p>{project.problem}</p>}
-          <figure class="section-image">
+          {project.problem && <ProjectText text={project.problem} />}
+          {challengeImage && <figure class="section-image">
             <Image src={challengeImage.src} alt={challengeImage.alt} widths={[480, 960, 1440]}
               sizes="(min-width: 64rem) 960px, 85vw" loading="lazy" class="project-image" />
-          </figure>
+          </figure>}
         </section>
         <section class="detail-section" aria-labelledby="solution-title">
           <h2 id="solution-title">La solución en acción</h2>
-          {project.solution && <p>{project.solution}</p>}
+          {project.solution && <ProjectText text={project.solution} />}
         </section>
         <section class="detail-section" aria-labelledby="technical-title">
           <h2 id="technical-title">Decisiones y retos técnicos</h2>
           {project.technicalDecisions && <p>{project.technicalDecisions}</p>}
+          {project.decisions?.map((decision) => <div class="technical-decision">
+            <h3>{decision.title}</h3>
+            <ProjectText text={decision.text} />
+            {decision.images?.length && <div class="decision-images">
+            {decision.images.map((image) => <figure>
+              <Image src={image.src} alt={image.alt} widths={[480, 960, 1600]}
+                sizes="(min-width: 48rem) 480px, 85vw" loading="lazy" class="project-image" />
+            </figure>)}
+            </div>}
+          </div>)}
         </section>
         <section class="detail-section" aria-labelledby="learnings-title">
           <h2 id="learnings-title">Aprendizajes</h2>
-          {project.learnings && <p>{project.learnings}</p>}
+          {project.learnings && <ProjectText text={project.learnings} />}
         </section>
         <section class="detail-section" aria-labelledby="result-title">
           <h2 id="result-title">Resultado y Galería</h2>
-          {project.result && <p>{project.result}</p>}
+          {project.result && <ProjectText text={project.result} />}
           <ResultGallery images={gallery.length ? gallery : [project.cover]} />
         </section>
         <section class="detail-section" aria-labelledby="links-title">
@@ -179,14 +191,20 @@ const details = [
   .code { display: flex; align-items: center; justify-content: center; gap: .5rem; width: fit-content; min-height: 44px; margin: 1.25rem auto 0; padding: .5rem .75rem; border-radius: .2rem; background: #d4d4d8; color: #18181b; text-decoration: none; font: .8rem var(--font-mono); }
   .cover-area { position: relative; isolation: isolate; padding: var(--space-8) clamp(1.25rem, 5vw, 4rem); border-block: 1px solid var(--color-border); }
   button.code { border: 0; }
-  .info-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: 1.25rem; }
-  .info-actions .code { margin: 0; }
+  .info-actions { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .5rem; margin-top: 1.25rem; }
+  .info-actions .code { width: 100%; min-width: 0; margin: 0; padding: .5rem .375rem; gap: .3rem; font-size: .75rem; text-align: center; }
+  .info-actions .code img, .info-actions .code svg { flex-shrink: 0; }
   .code:disabled { opacity: .65; cursor: not-allowed; }
   .cover-area::before { content: ''; position: absolute; z-index: -1; inset: 0 0 30%; border-radius: 0 0 2rem 9rem; background: #050505; }
   figure { max-width: 60rem; margin: 0 auto; overflow: hidden; border: 1px solid var(--color-border); border-radius: 1.25rem; background: #d4d4d8; }
   .project-image { display: block; width: 100%; height: auto; }
   .detail-section { padding: var(--space-6) clamp(1.25rem, 5vw, 4rem) var(--space-8); }
   .detail-section + .detail-section { border-top: 1px solid var(--color-border); }
+  .technical-decision { margin-top: var(--space-8); }
+  .decision-images { display: grid; gap: var(--space-4); max-width: 60rem; margin: var(--space-6) auto 0; }
+  .decision-images figure { width: 100%; min-width: 0; }
+  @media (min-width: 48rem) { .decision-images { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .technical-decision h3 { margin: 0; font: 600 1.1rem/1.5 var(--font-mono); }
   h2 { margin: 0; font: 600 clamp(1.25rem, 3vw, 1.75rem)/1.3 var(--font-mono); }
   .detail-section p { max-width: 70ch; color: var(--color-text-muted); margin: var(--space-4) 0 0; white-space: pre-line; }
   .section-image { margin-top: var(--space-8); }

@@ -13,6 +13,8 @@ export interface Project {
   slug: string;
   title: string;
   summary: string;
+  introduction?: string;
+  decisions?: readonly { title: string; text: string; images?: readonly ProjectImage[] }[];
   technologies: readonly TechnologyId[];
   cover: ProjectImage;
   gallery: readonly ProjectImage[];

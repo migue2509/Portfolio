@@ -1,0 +1,16 @@
+---
+interface Props { text: string; }
+const { text } = Astro.props;
+const paragraphs = text.split(/\n\s*\n/);
+---
+{paragraphs.map((paragraph) => <p>
+  {paragraph.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part) =>
+    part.startsWith('**') ? <strong>{part.slice(2, -2)}</strong>
+    : part.startsWith('`') ? <code>{part.slice(1, -1)}</code> : part
+  )}
+</p>)}
+<style>
+  p { max-width: 70ch; margin: var(--space-4) 0 0; color: var(--color-text-muted); }
+  strong { color: var(--color-text); }
+  code { color: var(--color-accent); font-family: var(--font-mono); font-size: .9em; }
+</style>
