@@ -31,12 +31,14 @@ const { title, description } = Astro.props;
 
 <style>
   .site-body {
+    --page-gutter: 0px;
+    padding-inline: var(--page-gutter);
     padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   }
 
   @media (min-width: 64rem) {
     .site-body {
-      padding-inline: 3.5rem;
+      --page-gutter: 3.5rem;
       padding-bottom: 0;
     }
   }
