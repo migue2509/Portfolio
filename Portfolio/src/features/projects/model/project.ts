@@ -4,6 +4,9 @@ import type { TechnologyId } from "../../../data/technologies";
 export interface ProjectImage {
   src: ImageMetadata;
   alt: string;
+  title?: string;
+  description?: string;
+  highlights?: readonly string[];
 }
 
 export interface Project {
@@ -24,4 +27,9 @@ export interface Project {
   tags?: readonly string[];
   tools?: readonly string[];
   problem?: string;
+  challengeImage?: ProjectImage;
+  solution?: string;
+  technicalDecisions?: string;
+  learnings?: string;
+  result?: string;
 }

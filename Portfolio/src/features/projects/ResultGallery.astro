@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import type { ProjectImage } from './model/project';
+interface Props { images: readonly ProjectImage[]; }
+const { images } = Astro.props;
+const number = (value: number) => String(value).padStart(2, '0');
+---
+<div class="result-gallery" data-result-gallery>
+  <div class="slides">
+    {images.map((image, index) => <div class="slide" data-result-slide>
+      <div class="description">
+        <h3><span>{number(index + 1)}</span>{image.title ?? image.alt}</h3>
+        {image.description && <p>{image.description}</p>}
+        {image.highlights?.length && <ul>{image.highlights.map((point) => <li>{point}</li>)}</ul>}
+      </div>
+      <figure><Image src={image.src} alt={image.alt} widths={[480, 960, 1440]} sizes="(min-width: 64rem) 800px, 85vw" loading="lazy" /></figure>
+    </div>)}
+  </div>
+  <div class="controls" data-result-controls hidden>
+    <button type="button" data-result-prev aria-label="Imagen anterior" disabled={images.length < 2}>‹</button>
+    <button type="button" data-result-next aria-label="Imagen siguiente" disabled={images.length < 2}>›</button>
+    <p role="status" aria-atomic="true" data-result-status>01 / {number(images.length)}</p>
+  </div>
+  <div class="thumbnails" data-result-thumbnails hidden>
+    {images.map((image, index) => <button type="button" data-result-thumb aria-label={`Ver imagen ${index + 1}: ${image.title ?? image.alt}`} aria-current={index === 0 ? 'true' : undefined}>
+      <Image src={image.src} alt="" width={240} loading="lazy" />
+      <span>{image.title ?? image.alt}</span>
+    </button>)}
+  </div>
+</div>
+<script>
+  const initialized = new WeakSet<HTMLElement>();
+  function initialize() {
+    document.querySelectorAll<HTMLElement>('[data-result-gallery]').forEach((root) => {
+      if (initialized.has(root)) return;
+      const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-result-slide]'));
+      const thumbs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-result-thumb]'));
+      const status = root.querySelector<HTMLElement>('[data-result-status]');
+      if (!slides.length || !status) return;
+      initialized.add(root);
+      const events = new AbortController();
+      let active = 0;
+      function select(index: number) {
+        active = (index + slides.length) % slides.length;
+        slides.forEach((slide, i) => { slide.hidden = i !== active; });
+        thumbs.forEach((thumb, i) => { if (i === active) thumb.setAttribute('aria-current', 'true'); else thumb.removeAttribute('aria-current'); });
+        status!.textContent = `${String(active + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      }
+      root.querySelectorAll<HTMLElement>('[data-result-controls], [data-result-thumbnails]').forEach((element) => { element.hidden = false; });
+      root.querySelector('[data-result-prev]')?.addEventListener('click', () => select(active - 1), { signal: events.signal });
+      root.querySelector('[data-result-next]')?.addEventListener('click', () => select(active + 1), { signal: events.signal });
+      thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => select(i), { signal: events.signal }));
+      root.addEventListener('keydown', (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault(); select(active + (event.key === 'ArrowRight' ? 1 : -1));
+        if (thumbs.includes(document.activeElement as HTMLButtonElement)) thumbs[active].focus({ preventScroll: true });
+      }, { signal: events.signal });
+      select(0);
+      document.addEventListener('astro:before-swap', () => { events.abort(); initialized.delete(root); }, { once: true, signal: events.signal });
+    });
+  }
+  initialize();
+  document.addEventListener('astro:page-load', initialize);
+</script>
+<style>
+  .result-gallery { margin-top: var(--space-8); }
+  .slides { display: grid; gap: var(--space-6); }
+  .slide:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--space-8); align-items: start; }
+  .description::before { content: ''; display: block; width: 3.25rem; height: 2px; background: var(--color-accent); margin-bottom: 1rem; }
+  h3 { display: flex; align-items: baseline; gap: .75rem; margin: 0; font: 600 1rem/1.5 var(--font-mono); overflow-wrap: anywhere; }
+  h3 span { font-size: 2rem; }
+  .description p, ul { color: var(--color-text-muted); font-size: .875rem; }
+  ul { padding-left: 1.25rem; }
+  figure { margin: 0; padding: .5rem; border: 1px solid var(--color-border); background: #050505; }
+  figure img { width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: contain; border-radius: var(--radius-medium); background: #080808; }
+  .controls:not([hidden]) { display: flex; align-items: center; gap: .5rem; margin-block: var(--space-6); }
+  .controls button { width: 44px; height: 44px; border: 1px solid var(--color-border); border-radius: .35rem; background: #d4d4d8; color: #18181b; font-size: 2rem; cursor: pointer; }
+  .controls button:disabled { opacity: .4; cursor: default; }
+  .controls p { margin: 0 0 0 1rem; color: var(--color-accent); font: .8rem var(--font-mono); }
+  .thumbnails:not([hidden]) { display: flex; gap: 1.25rem; overflow-x: auto; padding: 1.25rem; border: 1px solid var(--color-border); background: rgb(8 8 8 / 60%); }
+  .thumbnails button { flex: 0 0 clamp(8rem, 18vw, 13rem); min-width: 0; padding: .25rem; border: 0; background: transparent; color: var(--color-text); cursor: pointer; font: .75rem/1.5 var(--font-mono); }
+  .thumbnails img { width: 100%; aspect-ratio: 2 / 1; object-fit: contain; border: 1px solid var(--color-border); border-radius: .5rem; background: #080808; }
+  .thumbnails span { display: block; margin-top: .75rem; }
+  .thumbnails [aria-current] { color: var(--color-accent); }
+  .thumbnails [aria-current] img { border-color: var(--color-accent); }
+  @media (max-width: 47.99rem) { .slide:not([hidden]) { grid-template-columns: minmax(0, 1fr); } }
+</style>

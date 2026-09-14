@@ -1,14 +1,14 @@
 ---
 import { Image } from "astro:assets";
 import SocialLinks from "../shared/brand/SocialLinks.astro";
-import Signature from "../shared/brand/Signature.astro";
+import Footer from "../shared/layout/Footer.astro";
 import portrait from "../assets/profile/icon.png";
 
 const formspreeEndpoint = (import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? "https://formspree.io/f/xaeyglpo").trim();
 if (formspreeEndpoint && !/^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+\/?$/.test(formspreeEndpoint)) {
   throw new Error("PUBLIC_FORMSPREE_ENDPOINT debe ser la URL https://formspree.io/f/ de tu formulario.");
 }
-const year = new Date().getFullYear();
+
 ---
 
 <section id="contacto" class="contact" aria-labelledby="contact-title">
@@ -52,16 +52,7 @@ const year = new Date().getFullYear();
         </form>
       </div>
 
-      <footer class="contact__footer">
-        <div class="contact__credits">
-          <Signature />
-          <p>© {year} Miguel Ospina. Todos los derechos reservados.</p>
-        </div>
-        <a href="#inicio" class="contact__top" aria-label="Volver al inicio" data-back-to-top>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6" /></svg>
-        </a>
-        <p class="contact__name" aria-label="Miguel Ospina">Miguel Ospina</p>
-      </footer>
+      <Footer />
     </div>
 </section>
 
@@ -197,42 +188,14 @@ const year = new Date().getFullYear();
   .contact__status[data-state="success"] { color: #86efac; }
   .contact__status { margin: 0; font-size: 0.75rem; line-height: 1.5; color: var(--color-accent); }
   .contact__status:empty { display: none; }
-  .contact__footer {
-    margin-inline: clamp(1rem, 3vw, 2rem);
-    padding: 0.75rem 0 2rem;
-    border-top: 1px solid rgb(147 197 253 / 35%);
-  }
-  .contact__credits { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-  .contact__credits :global(.signature) { width: 3rem; height: 1.25rem; flex-shrink: 0; }
-  .contact__credits p { margin: 0; color: var(--color-text-muted); font: 0.6875rem/1.6 var(--font-mono); }
-  .contact__top {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin: 1.25rem auto 0;
-    border: 2px solid var(--color-accent);
-    border-radius: 50%;
-    background: #79a8d5;
-    color: #080808;
-  }
-  .contact__top:hover { background: var(--color-accent); }
-  .contact__name {
-    margin: 2.25rem 0 0;
-    text-align: center;
-    color: #fafafa;
-    font: 900 clamp(1.5rem, 7vw, 6rem)/1.1 Georgia, "Times New Roman", serif;
-    letter-spacing: -0.05em;
-    text-transform: uppercase;
-  }
   @media (min-width: 48rem) {
     .contact__layout { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 2.5rem; }
     .contact__intro { text-align: left; padding-top: 0.5rem; }
     .contact__portrait { margin-inline: 0; }
     .contact__social { margin-inline: 0; }
-    .contact__credits { justify-content: flex-end; }
+
   }
   @media (prefers-reduced-motion: no-preference) {
-    .contact__send, .contact__top { transition: background-color 180ms ease; }
+    .contact__send { transition: background-color 180ms ease; }
   }
 </style>

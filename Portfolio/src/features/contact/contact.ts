@@ -5,9 +5,8 @@ export function initializeContact() {
   if (!section || initialized.has(section)) return;
   const form = section.querySelector<HTMLFormElement>("[data-contact-form]");
   const status = section.querySelector<HTMLElement>("[data-contact-status]");
-  const backToTop = section.querySelector<HTMLAnchorElement>("[data-back-to-top]");
   const submit = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
-  if (!form || !status || !backToTop || !submit) return;
+  if (!form || !status || !submit) return;
   initialized.add(section);
   const events = new AbortController();
   const endpoint = form.getAttribute("action") ?? "";
@@ -87,15 +86,6 @@ export function initializeContact() {
     }
   }, { signal: events.signal });
 
-  backToTop.addEventListener("click", (event) => {
-    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    document.getElementById("inicio")?.focus({ preventScroll: true });
-    window.scrollTo({
-      top: 0,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
-    });
-  }, { signal: events.signal });
 
   document.addEventListener("astro:before-swap", () => {
     events.abort();

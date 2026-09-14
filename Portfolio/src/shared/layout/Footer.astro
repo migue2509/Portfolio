@@ -1,0 +1,65 @@
+---
+import Signature from '../brand/Signature.astro';
+const year = new Date().getFullYear();
+---
+<footer class="contact__footer">
+        <div class="contact__credits">
+          <Signature />
+          <p>© {year} Miguel Ospina. Todos los derechos reservados.</p>
+        </div>
+        <a href="#inicio" class="contact__top" aria-label="Volver al inicio" data-back-to-top>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6" /></svg>
+        </a>
+        <p class="contact__name" aria-label="Miguel Ospina">Miguel Ospina</p>
+      </footer>
+<style>
+  .contact__footer {
+    margin-inline: clamp(1rem, 3vw, 2rem);
+    padding: 0.75rem 0 2rem;
+    border-top: 1px solid rgb(147 197 253 / 35%);
+  }
+  .contact__credits { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+  .contact__credits :global(.signature) { width: 3rem; height: 1.25rem; flex-shrink: 0; }
+  .contact__credits p { margin: 0; color: var(--color-text-muted); font: 0.6875rem/1.6 var(--font-mono); }
+  .contact__top {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 1.25rem auto 0;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    background: #79a8d5;
+    color: #080808;
+  }
+  .contact__top:hover { background: var(--color-accent); }
+  .contact__name {
+    margin: 2.25rem 0 0;
+    text-align: center;
+    color: #fafafa;
+    font: 900 clamp(1.5rem, 7vw, 6rem)/1.1 Georgia, "Times New Roman", serif;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 48rem) { .contact__credits { justify-content: flex-end; } }
+  @media (prefers-reduced-motion: no-preference) { .contact__top { transition: background-color 180ms ease; } }
+</style>
+<script>
+  const initialized = new WeakSet<HTMLAnchorElement>();
+  function initializeFooter() {
+    document.querySelectorAll<HTMLAnchorElement>('[data-back-to-top]').forEach((link) => {
+      if (initialized.has(link)) return;
+      initialized.add(link);
+      const events = new AbortController();
+      link.addEventListener('click', (event) => {
+        if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        document.getElementById('inicio')?.focus({ preventScroll: true });
+        window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      }, { signal: events.signal });
+      document.addEventListener('astro:before-swap', () => { events.abort(); initialized.delete(link); }, { once: true, signal: events.signal });
+    });
+  }
+  initializeFooter();
+  document.addEventListener('astro:page-load', initializeFooter);
+</script>

@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 import MainLayout from "../../layouts/MainLayout.astro";
 import Container from "../../shared/layout/Container.astro";
+import Footer from "../../shared/layout/Footer.astro";
+import ResultGallery from "../../features/projects/ResultGallery.astro";
 import { projects } from "../../data/projects";
 import { technologies } from "../../data/technologies";
 import githubMark from "../../assets/brand/github-mark.svg";
@@ -12,6 +14,9 @@ export function getStaticPaths() {
 }
 interface Props { project: Project; }
 const { project } = Astro.props;
+const challengeImage = project.challengeImage ?? project.cover;
+const projectIndex = projects.findIndex((item) => item.slug === project.slug);
+const nextProject = projects.length > 1 ? projects[(projectIndex + 1) % projects.length] : undefined;
 const gallery = project.gallery.filter((image) => image.src.src !== project.cover.src.src);
 const tools = project.tools ?? project.technologies.map((id) => technologies[id].name);
 const catalog = Object.values(technologies);
@@ -23,7 +28,7 @@ const details = [
 ---
 
 <MainLayout title={`${project.title} | Miguel Ospina`} description={project.summary} showHeader={false}>
-  <main class="project-detail">
+  <main id="inicio" tabindex="-1" class="project-detail">
     <Container>
       <article class="frame" aria-labelledby="project-title">
         <a class="back grain-surface" href="/#proyectos"><span aria-hidden="true">←</span> Volver</a>
@@ -70,19 +75,53 @@ const details = [
               sizes="(min-width: 64rem) 960px, 85vw" loading="eager" fetchpriority="high" class="project-image" />
           </figure>
         </div>
-        {project.problem && <section class="problem" aria-labelledby="problem-title">
-          <h2 id="problem-title">El problema</h2>
-          <p>{project.problem}</p>
-        </section>}
-        {gallery.length > 0 && <section class="gallery" aria-label="Capturas del proyecto">
-          {gallery.map((image) => <figure>
-            <Image src={image.src} alt={image.alt} widths={[480, 960, 1440]}
+        <section class="detail-section" aria-labelledby="challenge-title">
+          <h2 id="challenge-title">El reto</h2>
+          {project.problem && <p>{project.problem}</p>}
+          <figure class="section-image">
+            <Image src={challengeImage.src} alt={challengeImage.alt} widths={[480, 960, 1440]}
               sizes="(min-width: 64rem) 960px, 85vw" loading="lazy" class="project-image" />
-          </figure>)}
-        </section>}
+          </figure>
+        </section>
+        <section class="detail-section" aria-labelledby="solution-title">
+          <h2 id="solution-title">La solución en acción</h2>
+          {project.solution && <p>{project.solution}</p>}
+        </section>
+        <section class="detail-section" aria-labelledby="technical-title">
+          <h2 id="technical-title">Decisiones y retos técnicos</h2>
+          {project.technicalDecisions && <p>{project.technicalDecisions}</p>}
+        </section>
+        <section class="detail-section" aria-labelledby="learnings-title">
+          <h2 id="learnings-title">Aprendizajes</h2>
+          {project.learnings && <p>{project.learnings}</p>}
+        </section>
+        <section class="detail-section" aria-labelledby="result-title">
+          <h2 id="result-title">Resultado y Galería</h2>
+          {project.result && <p>{project.result}</p>}
+          <ResultGallery images={gallery.length ? gallery : [project.cover]} />
+        </section>
+        <section class="detail-section" aria-labelledby="links-title">
+          <h2 id="links-title">GitHub / Demo</h2>
+          <div class="project-links">
+            {project.repositoryUrl && <a class="code grain-surface" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+              <img src={githubMark.src} width="16" height="16" alt="" />
+              GitHub <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+            </a>}
+            {project.liveUrl && <a class="code grain-surface" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+              Demo <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+            </a>}
+          </div>
+        </section>
+        <section class="detail-section" aria-labelledby="next-title">
+          <h2 id="next-title">Siguiente proyecto</h2>
+          {nextProject && <a class="next-project" href={`/proyectos/${nextProject.slug}/`}>
+            {nextProject.title} <span aria-hidden="true">→</span>
+          </a>}
+        </section>
       </article>
     </Container>
   </main>
+  <Footer />
 </MainLayout>
 
 <style>
@@ -133,10 +172,14 @@ const details = [
   .cover-area::before { content: ''; position: absolute; z-index: -1; inset: 0 0 30%; border-radius: 0 0 2rem 9rem; background: #050505; }
   figure { max-width: 60rem; margin: 0 auto; overflow: hidden; border: 1px solid var(--color-border); border-radius: 1.25rem; background: #d4d4d8; }
   .project-image { display: block; width: 100%; height: auto; }
-  .problem { padding: var(--space-6) clamp(1.25rem, 5vw, 4rem) var(--space-8); }
+  .detail-section { padding: var(--space-6) clamp(1.25rem, 5vw, 4rem) var(--space-8); }
+  .detail-section + .detail-section { border-top: 1px solid var(--color-border); }
   h2 { margin: 0; font: 600 clamp(1.25rem, 3vw, 1.75rem)/1.3 var(--font-mono); }
-  .problem p { max-width: 70ch; color: var(--color-text-muted); margin: var(--space-4) 0 0; }
-  .gallery { display: grid; gap: var(--space-8); padding: var(--space-8) clamp(1.25rem, 5vw, 4rem); }
+  .detail-section p { max-width: 70ch; color: var(--color-text-muted); margin: var(--space-4) 0 0; white-space: pre-line; }
+  .section-image { margin-top: var(--space-8); }
+  .project-links { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+  .project-links .code { margin: var(--space-4) 0 0; }
+  .next-project { display: inline-flex; align-items: center; gap: var(--space-4); min-height: 44px; margin-top: var(--space-4); color: var(--color-accent); font-family: var(--font-mono); text-underline-offset: .25em; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   @media (max-width: 47.99rem) {
     .heading { grid-template-columns: minmax(0, 1fr); }
