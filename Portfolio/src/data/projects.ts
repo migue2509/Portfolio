@@ -3,6 +3,7 @@ import { tuCanchaContent } from "./tu-cancha-content";
 import { tuCanchaGallery } from "./tu-cancha-gallery";
 import { juanChupeContent } from "./juan-chupe-content";
 import { juanChupeGallery } from "./juan-chupe-gallery";
+import { smExtremeLifeContent } from "./sm-extreme-life-content";
 
 import tucanchaCover from "../assets/projects/tu-cancha/cover.png";
 import juanChupeCover from "../assets/projects/juan-chupe/gallery/cover.png";
@@ -49,5 +50,18 @@ export const projects = [
       alt: "Vista del sistema Juan Chupe Granizados ERP",
     },
     gallery: juanChupeGallery,
+  },
+  {
+    slug: "sm-extreme-life",
+    ...smExtremeLifeContent,
+    title: "SM EXTREME LIFE",
+    team: "Proyecto Individual",
+    status: "En requerimientos",
+    summary: "Web para entrenador personal con landing y funcionalidades backend, en etapa de requerimientos y primeras reuniones.",
+    category: "Web para entrenador personal",
+    role: "Desarrollador Full Stack",
+    client: "Smaya_Trainer",
+    tags: ["Full Stack", "En requerimientos"],
+    technologies: ["html", "css", "javascript", "trello", "figma", "java", "springBoot", "postman"],
   },
 ] satisfies readonly Project[];
