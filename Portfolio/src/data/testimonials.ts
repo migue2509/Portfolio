@@ -45,7 +45,6 @@ export const testimonials: readonly Testimonial[] = [
     id: 'samuel-maya',
     name: 'Samuel Maya',
     role: 'CEO · SM EXTREME LIFE',
-    draft: true,
     quote: 'En estas primeras reuniones, Miguel me ha ayudado a organizar las ideas para SM EXTREME LIFE y a aclarar lo que necesito para mi página web. Valoro su disposición para escuchar y definir conmigo el alcance del proyecto.',
     logo: samuelLogo ? { src: samuelLogo, alt: 'Logo de SM EXTREME LIFE' } : undefined,
   },
