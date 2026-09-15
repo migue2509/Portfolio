@@ -29,6 +29,11 @@ export interface Project {
   tags?: readonly string[];
   tools?: readonly string[];
   problem?: string;
+  challengeTitle?: string;
+  problemAfterImage?: string;
+  solutionSteps?: readonly string[];
+  solutionAfterFlow?: string;
+  documents?: readonly { file: string; label: string }[];
   challengeImage?: ProjectImage;
   solution?: string;
   technicalDecisions?: string;

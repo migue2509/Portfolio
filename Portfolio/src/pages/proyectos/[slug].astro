@@ -9,13 +9,22 @@ import { projects } from "../../data/projects";
 import { technologies } from "../../data/technologies";
 import githubMark from "../../assets/brand/github-mark.svg";
 import type { Project } from "../../features/projects/model/project";
+import type { ImageMetadata } from "astro";
+import { existsSync } from "node:fs";
 
 export function getStaticPaths() {
   return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
 }
 interface Props { project: Project; }
 const { project } = Astro.props;
-const challengeImage = project.challengeImage;
+const paperPhotos = import.meta.glob<{ default: ImageMetadata }>("../../assets/projects/juan-chupe/registro-papel.jpg", { eager: true });
+const paperPhoto = paperPhotos["../../assets/projects/juan-chupe/registro-papel.jpg"]?.default;
+const challengeImage = project.challengeImage ?? (project.slug === "juan-chupe" && paperPhoto ? { src: paperPhoto, alt: "Registro original en papel de la operación de Juan Chupe" } : undefined);
+const documents = project.documents?.map((document) => ({
+  ...document,
+  href: `/documents/${project.slug}/${document.file}`,
+  available: existsSync(`public/documents/${project.slug}/${document.file}`),
+}));
 const projectIndex = projects.findIndex((item) => item.slug === project.slug);
 const nextProject = projects.length > 1 ? projects[(projectIndex + 1) % projects.length] : undefined;
 const gallery = project.gallery.filter((image) => image.src.src !== project.cover.src.src);
@@ -87,15 +96,21 @@ const details = [
         </div>
         <section class="detail-section" aria-labelledby="challenge-title">
           <h2 id="challenge-title">El reto</h2>
+          {project.challengeTitle && <h3 class="challenge-subtitle">{project.challengeTitle}</h3>}
           {project.problem && <ProjectText text={project.problem} />}
           {challengeImage && <figure class="section-image">
             <Image src={challengeImage.src} alt={challengeImage.alt} widths={[480, 960, 1440]}
               sizes="(min-width: 64rem) 960px, 85vw" loading="lazy" class="project-image" />
           </figure>}
+          {project.problemAfterImage && <ProjectText text={project.problemAfterImage} />}
         </section>
         <section class="detail-section" aria-labelledby="solution-title">
           <h2 id="solution-title">La solución en acción</h2>
           {project.solution && <ProjectText text={project.solution} />}
+          {project.solutionSteps?.length && <ol class="solution-flow" aria-label="Flujo de la operación">
+            {project.solutionSteps.map((step) => <li>{step}</li>)}
+          </ol>}
+          {project.solutionAfterFlow && <ProjectText text={project.solutionAfterFlow} />}
         </section>
         <section class="detail-section" aria-labelledby="technical-title">
           <h2 id="technical-title">Decisiones y retos técnicos</h2>
@@ -120,6 +135,14 @@ const details = [
           {project.result && <ProjectText text={project.result} />}
           <ResultGallery images={gallery.length ? gallery : [project.cover]} />
         </section>
+        {documents?.length && <section class="detail-section" aria-labelledby="documents-title">
+          <h2 id="documents-title">Documentación y evidencia del proyecto</h2>
+          <ul class="document-links">
+            {documents.map((document) => <li>
+              {document.available ? <a href={document.href} download>{document.label} <span aria-hidden="true">↓</span></a> : <span>{document.label} <small>— pendiente de archivo</small></span>}
+            </li>)}
+          </ul>
+        </section>}
         <section class="detail-section" aria-labelledby="links-title">
           <h2 id="links-title">GitHub / Demo</h2>
           <div class="project-links">
@@ -201,6 +224,13 @@ const details = [
   .detail-section { padding: var(--space-8) clamp(1.25rem, 5vw, 4rem); }
   .detail-section + .detail-section { border-top: 1px solid var(--color-border); }
   .technical-decision { margin-top: var(--space-8); }
+  .challenge-subtitle { margin: 0; color: var(--color-accent); font: 600 1.15rem/1.5 var(--font-mono); }
+  .solution-flow { display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; margin: var(--space-6) 0; padding: 0; list-style: none; font-family: var(--font-mono); }
+  .solution-flow li { color: var(--color-accent); }
+  .solution-flow li + li::before { content: '↓'; display: block; margin-bottom: .75rem; color: var(--color-text-muted); }
+  .document-links { display: grid; gap: var(--space-4); margin: 0; padding: 0; list-style: none; overflow-wrap: anywhere; }
+  .document-links a { color: var(--color-accent); text-underline-offset: .25em; }
+  .document-links small { color: var(--color-text-muted); }
   .decision-images { display: grid; gap: var(--space-4); max-width: 60rem; margin: var(--space-6) auto 0; }
   .decision-images figure { width: 100%; min-width: 0; }
   @media (min-width: 48rem) { .decision-images { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

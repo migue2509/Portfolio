@@ -1,6 +1,7 @@
 import type { Project } from "../features/projects/model/project";
 import { tuCanchaContent } from "./tu-cancha-content";
 import { tuCanchaGallery } from "./tu-cancha-gallery";
+import { juanChupeContent } from "./juan-chupe-content";
 
 import tucanchaCover from "../assets/projects/tu-cancha/cover.png";
 import juanChupeCover from "../assets/projects/juan-chupe/cover.png";
@@ -26,6 +27,7 @@ export const projects = [
   },
   {
     slug: "juan-chupe",
+    ...juanChupeContent,
     title: "Juan Chupe Granizados ERP",
     team: "Proyecto Individual",
     dateLabel: "Julio, 2026",
@@ -37,7 +39,6 @@ export const projects = [
     tags: ["ERP", "Full Stack"],
     // Información documentada en la experiencia del CV.
     tools: ["Python", "Django REST Framework", "PostgreSQL", "React", "Tailwind CSS", "Git", "GitHub"],
-    problem: "La gestión de inventario, caja y operación se llevaba en registros en papel. El arqueo de caja requería entre 60 y 90 minutos al cierre de la jornada.",
     technologies: [],
     cover: {
       src: juanChupeCover,
