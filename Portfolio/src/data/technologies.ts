@@ -11,6 +11,10 @@ import intellijIcon from "../assets/technologies/intellij.png";
 import figmaIcon from "../assets/technologies/figma.png";
 import trelloIcon from "../assets/technologies/trello.png";
 import postmanIcon from "../assets/technologies/postman.svg";
+import reactIcon from "../assets/technologies/react.svg";
+import djangoRestIcon from "../assets/technologies/django-rest.svg";
+import tailwindIcon from "../assets/technologies/tailwind.svg";
+import githubIcon from "../assets/social/github.svg";
 
 export const technologies = {
   html: { name: "HTML", icon: htmlIcon },
@@ -26,6 +30,10 @@ export const technologies = {
   figma: { name: "Figma", icon: figmaIcon },
   trello: { name: "Trello", icon: trelloIcon },
   postman: { name: "Postman", icon: postmanIcon },
+  react: { name: "React", icon: reactIcon },
+  djangoRest: { name: "Django REST Framework", icon: djangoRestIcon },
+  tailwind: { name: "Tailwind CSS", icon: tailwindIcon },
+  github: { name: "GitHub", icon: githubIcon },
 } as const;
 
 export type TechnologyId = keyof typeof technologies;

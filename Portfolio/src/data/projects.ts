@@ -30,6 +30,7 @@ export const projects = [
   {
     slug: "juan-chupe",
     ...juanChupeContent,
+    repositoryUrl: "https://github.com/migue2509/juan-chupe-erp/tree/main",
     challengeImage: { src: juanChupePaper, alt: "Registro original en papel de la operación de Juan Chupe" },
     title: "Juan Chupe Granizados ERP",
     team: "Proyecto Individual",
