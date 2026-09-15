@@ -9,7 +9,6 @@ import { projects } from "../../data/projects";
 import { technologies } from "../../data/technologies";
 import githubMark from "../../assets/brand/github-mark.svg";
 import type { Project } from "../../features/projects/model/project";
-import type { ImageMetadata } from "astro";
 import { existsSync } from "node:fs";
 
 export function getStaticPaths() {
@@ -17,9 +16,7 @@ export function getStaticPaths() {
 }
 interface Props { project: Project; }
 const { project } = Astro.props;
-const paperPhotos = import.meta.glob<{ default: ImageMetadata }>("../../assets/projects/juan-chupe/registro-papel.jpg", { eager: true });
-const paperPhoto = paperPhotos["../../assets/projects/juan-chupe/registro-papel.jpg"]?.default;
-const challengeImage = project.challengeImage ?? (project.slug === "juan-chupe" && paperPhoto ? { src: paperPhoto, alt: "Registro original en papel de la operación de Juan Chupe" } : undefined);
+const challengeImage = project.challengeImage;
 const documents = project.documents?.map((document) => ({
   ...document,
   href: `/documents/${project.slug}/${document.file}`,
@@ -98,11 +95,11 @@ const details = [
           <h2 id="challenge-title">El reto</h2>
           {project.challengeTitle && <h3 class="challenge-subtitle">{project.challengeTitle}</h3>}
           {project.problem && <ProjectText text={project.problem} />}
-          {challengeImage && <figure class="section-image">
-            <Image src={challengeImage.src} alt={challengeImage.alt} widths={[480, 960, 1440]}
-              sizes="(min-width: 64rem) 960px, 85vw" loading="lazy" class="project-image" />
-          </figure>}
           {project.problemAfterImage && <ProjectText text={project.problemAfterImage} />}
+          {challengeImage && <figure class="section-image challenge-image">
+            <Image src={challengeImage.src} alt={challengeImage.alt} widths={[480, 960, 1440]}
+              sizes="(min-width: 48rem) 480px, 85vw" loading="lazy" class="project-image" />
+          </figure>}
         </section>
         <section class="detail-section" aria-labelledby="solution-title">
           <h2 id="solution-title">La solución en acción</h2>
@@ -253,6 +250,7 @@ const details = [
   }
   .detail-section p { max-width: 70ch; color: var(--color-text-muted); margin: var(--space-4) 0 0; white-space: pre-line; }
   .section-image { margin-top: var(--space-8); }
+  .challenge-image { width: 100%; max-width: 30rem; margin-inline: auto; }
   .project-links { display: flex; flex-wrap: wrap; gap: var(--space-4); }
   .project-links .code { margin: var(--space-4) 0 0; }
   .next-project { display: inline-flex; align-items: center; gap: var(--space-4); min-height: 44px; margin-top: var(--space-4); color: var(--color-accent); font-family: var(--font-mono); text-underline-offset: .25em; }

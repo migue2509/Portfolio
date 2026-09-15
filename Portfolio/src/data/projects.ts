@@ -5,6 +5,7 @@ import { juanChupeContent } from "./juan-chupe-content";
 
 import tucanchaCover from "../assets/projects/tu-cancha/cover.png";
 import juanChupeCover from "../assets/projects/juan-chupe/cover.png";
+import juanChupePaper from "../assets/projects/juan-chupe/registro-papel.jpeg";
 
 export const projects = [
   {
@@ -28,6 +29,7 @@ export const projects = [
   {
     slug: "juan-chupe",
     ...juanChupeContent,
+    challengeImage: { src: juanChupePaper, alt: "Registro original en papel de la operación de Juan Chupe" },
     title: "Juan Chupe Granizados ERP",
     team: "Proyecto Individual",
     dateLabel: "Julio, 2026",
