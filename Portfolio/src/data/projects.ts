@@ -2,9 +2,10 @@ import type { Project } from "../features/projects/model/project";
 import { tuCanchaContent } from "./tu-cancha-content";
 import { tuCanchaGallery } from "./tu-cancha-gallery";
 import { juanChupeContent } from "./juan-chupe-content";
+import { juanChupeGallery } from "./juan-chupe-gallery";
 
 import tucanchaCover from "../assets/projects/tu-cancha/cover.png";
-import juanChupeCover from "../assets/projects/juan-chupe/cover.png";
+import juanChupeCover from "../assets/projects/juan-chupe/gallery/cover.png";
 import juanChupePaper from "../assets/projects/juan-chupe/registro-papel.jpeg";
 
 export const projects = [
@@ -46,6 +47,6 @@ export const projects = [
       src: juanChupeCover,
       alt: "Vista del sistema Juan Chupe Granizados ERP",
     },
-    gallery: [],
+    gallery: juanChupeGallery,
   },
 ] satisfies readonly Project[];
