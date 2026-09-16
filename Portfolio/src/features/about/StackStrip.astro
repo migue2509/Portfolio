@@ -33,8 +33,8 @@ import TechnologyMarquee from "../../shared/ui/TechnologyMarquee.astro";
 
 <style>
   .stack-strip {
-    margin: 0 var(--space-6) var(--space-6);
-    padding: var(--space-4);
+    margin: 0 clamp(.75rem, 2vw, 1.5rem) var(--space-6);
+    padding: clamp(.5rem, 1.5vw, 1rem);
 
     border: 1px solid var(--color-border);
     border-radius: var(--radius-medium);
@@ -51,12 +51,9 @@ import TechnologyMarquee from "../../shared/ui/TechnologyMarquee.astro";
 
   .stack-strip__groups {
     display: grid;
-    gap: var(--space-6);
-  }
-
-  @media (min-width: 64rem) {
-    .stack-strip__groups {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(.5rem, 2vw, 1.5rem);
+    max-width: 60rem;
+    margin-inline: auto;
   }
 </style>

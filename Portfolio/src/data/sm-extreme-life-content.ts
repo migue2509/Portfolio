@@ -1,6 +1,6 @@
 import type { ImageMetadata } from "astro";
 import type { ProjectImage } from "../features/projects/model/project";
-import pendingCover from "../assets/projects/sm-extreme-life/cover-pending.svg";
+import cover from "../assets/projects/sm-extreme-life/cover.png";
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "../assets/projects/sm-extreme-life/*.{png,jpg,jpeg,webp}",
@@ -14,7 +14,6 @@ function findImage(name: string): ImageMetadata | undefined {
   }
 }
 
-const cover = findImage("cover");
 const meeting = findImage("reunion-cliente");
 
 // Alcance propuesto a partir de las respuestas escritas del formulario.
@@ -27,8 +26,8 @@ export const smExtremeLifeContent = {
   learnings: "Pendientes de documentar conforme avancen las reuniones y el desarrollo.",
   result: "Estado actual: formulario de requerimientos y primeras reuniones con el cliente. El proyecto aún no cuenta con un producto terminado ni resultados de implementación.",
   cover: {
-    src: cover ?? pendingCover,
-    alt: cover ? "Portada de SM EXTREME LIFE" : "SM EXTREME LIFE: requerimientos y primeras reuniones",
+    src: cover,
+    alt: "Portada de SM EXTREME LIFE",
   },
   gallery: meeting ? [{
     src: meeting,
