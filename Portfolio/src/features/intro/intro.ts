@@ -18,5 +18,9 @@ export function initializeIntro() {
     .fromTo(columns, { opacity: 0 }, { opacity: 1, duration: 0.12, stagger: { amount: 1.12 }, ease: 'none' }, 0.15)
     .call(() => { status.textContent = 'Commit successful ✓'; }, [], 1.4)
     .to(composition, { scale: 1.035, opacity: 0, duration: 0.35, ease: 'power2.inOut' }, 2.05)
+    .call(() => {
+      dialog.dataset.revealing = 'true';
+      dialog.dispatchEvent(new Event('intro:revealing', { bubbles: true }));
+    }, [], 2.4)
     .to(dialog, { opacity: 0, duration: 0.2, ease: 'power1.out' }, 2.4);
 }

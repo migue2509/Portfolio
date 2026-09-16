@@ -36,7 +36,7 @@ const columns = Array.from({ length: 50 }, (_, column) => cells.filter((cell) =>
       events.abort();
       root.classList.remove('intro-pending');
       if (dialog.open) dialog.close();
-      dialog.dispatchEvent(new Event('intro:finished'));
+      dialog.dispatchEvent(new Event('intro:finished', { bubbles: true }));
       dialog.remove();
       if (previousFocus instanceof HTMLElement && previousFocus !== document.body && previousFocus.isConnected) {
         previousFocus.focus({ preventScroll: true });
