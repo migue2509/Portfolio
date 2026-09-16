@@ -62,6 +62,7 @@ const links = [
       toggle.setAttribute("aria-expanded", "false");
     }
     toggle.hidden = false;
+    document.addEventListener('navigation:close-menu', closeMenu, { signal: events.signal });
     header.setAttribute("data-ready", "");
     toggle.addEventListener("click", () => {
       const open = toggle.getAttribute("aria-expanded") !== "true";
@@ -224,7 +225,7 @@ const links = [
   :global(#experiencia),
   :global(#por-que-elegirme),
   :global(#contacto) {
-    scroll-margin-top: 7rem;
+    scroll-margin-top: var(--anchor-offset, 7rem);
   }
 
   @media (max-width: 52rem) {

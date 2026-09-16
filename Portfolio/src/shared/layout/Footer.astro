@@ -44,22 +44,3 @@ const year = new Date().getFullYear();
   @media (min-width: 48rem) { .contact__credits { justify-content: flex-end; } }
   @media (prefers-reduced-motion: no-preference) { .contact__top { transition: background-color 180ms ease; } }
 </style>
-<script>
-  const initialized = new WeakSet<HTMLAnchorElement>();
-  function initializeFooter() {
-    document.querySelectorAll<HTMLAnchorElement>('[data-back-to-top]').forEach((link) => {
-      if (initialized.has(link)) return;
-      initialized.add(link);
-      const events = new AbortController();
-      link.addEventListener('click', (event) => {
-        if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-        event.preventDefault();
-        document.getElementById('inicio')?.focus({ preventScroll: true });
-        window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-      }, { signal: events.signal });
-      document.addEventListener('astro:before-swap', () => { events.abort(); initialized.delete(link); }, { once: true, signal: events.signal });
-    });
-  }
-  initializeFooter();
-  document.addEventListener('astro:page-load', initializeFooter);
-</script>

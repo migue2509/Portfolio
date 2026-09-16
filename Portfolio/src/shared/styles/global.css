@@ -9,6 +9,12 @@
 
 html {
   color-scheme: dark;
+  scroll-behavior: auto;
+}
+
+/* Compensación compartida por navegación nativa y Lenis. */
+:where(main, section)[id] {
+  scroll-margin-top: var(--anchor-offset, 7rem) !important;
 }
 
 body {

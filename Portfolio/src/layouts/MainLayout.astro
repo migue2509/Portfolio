@@ -58,6 +58,18 @@ const { title, description, intro = false, showHeader = true } = Astro.props;
 </body>
 </html>
 
+<script>
+  import { initializeSmoothScroll, destroySmoothScroll } from '../shared/scripts/smooth-scroll';
+  initializeSmoothScroll();
+  document.addEventListener('astro:page-load', initializeSmoothScroll);
+  document.addEventListener('astro:before-swap', destroySmoothScroll);
+  if (import.meta.hot) import.meta.hot.dispose(() => {
+    destroySmoothScroll();
+    document.removeEventListener('astro:page-load', initializeSmoothScroll);
+    document.removeEventListener('astro:before-swap', destroySmoothScroll);
+  });
+</script>
+
 <style>
   .site-body {
     --page-gutter: 0px;
