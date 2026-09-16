@@ -51,12 +51,12 @@ import StackStrip from "../features/about/StackStrip.astro";
 
   .about__columns {
     display: grid;
-    gap: var(--space-6);
-    padding: var(--space-6);
+    gap: clamp(.75rem, 2vw, 1.5rem);
+    padding: clamp(.75rem, 2vw, 1.5rem);
     align-items: stretch;
   }
 
-  @media (min-width: 64rem) {
+  @media (min-width: 40rem) {
     .about__columns {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
