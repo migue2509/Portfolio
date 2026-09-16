@@ -6,7 +6,7 @@ import { juanChupeGallery } from "./juan-chupe-gallery";
 import { smExtremeLifeContent } from "./sm-extreme-life-content";
 
 import tucanchaCover from "../assets/projects/tu-cancha/cover.png";
-import juanChupeCover from "../assets/projects/juan-chupe/gallery/cover.png";
+import juanChupeCover from "../assets/projects/juan-chupe/cover.png";
 import juanChupePaper from "../assets/projects/juan-chupe/registro-papel.jpeg";
 
 export const projects = [
