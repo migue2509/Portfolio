@@ -16,6 +16,8 @@ export function initializeSmoothScroll() {
   const header = document.querySelector<HTMLElement>('[data-header]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let destination: HTMLElement | undefined;
+  let focusOrigin: Element | null = null;
+  const temporaryFocus = new Set<HTMLElement>();
 
   function measureHeader() {
     const style = header && getComputedStyle(header);
@@ -33,10 +35,15 @@ export function initializeSmoothScroll() {
   function focusDestination() {
     const target = destination;
     destination = undefined;
-    if (!target?.isConnected) return;
+    // No quitar el foco a quien ya pulsó Tab o seleccionó otro control.
+    if (!target?.isConnected || document.activeElement !== focusOrigin) return;
     if (!target.hasAttribute('tabindex')) {
       target.setAttribute('tabindex', '-1');
-      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+      temporaryFocus.add(target);
+      target.addEventListener('blur', () => {
+        target.removeAttribute('tabindex');
+        temporaryFocus.delete(target);
+      }, { once: true, signal: events.signal });
     }
     target.focus({ preventScroll: true });
   }
@@ -56,8 +63,16 @@ export function initializeSmoothScroll() {
     else if (!blocked && instance.isStopped) instance.start();
   }
   function configure() {
+    const pending = destination;
     destroyInstance();
-    if (motion.matches) return;
+    if (motion.matches) {
+      if (pending?.isConnected) {
+        pending.scrollIntoView({ behavior: 'instant', block: 'start' });
+        destination = pending;
+        focusDestination();
+      }
+      return;
+    }
     instance = new Lenis({
       autoRaf: false,
       smoothWheel: true,
@@ -68,6 +83,7 @@ export function initializeSmoothScroll() {
       anchors: { onComplete: focusDestination },
     });
     instance.on('scroll', ScrollTrigger.update);
+    gsap.ticker.lagSmoothing(0);
     gsap.ticker.add(tick);
     syncIntro();
   }
@@ -79,29 +95,50 @@ export function initializeSmoothScroll() {
       ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
     if (!link) return;
     const url = new URL(link.href, location.href);
-    if (url.origin !== location.origin || url.pathname !== location.pathname || !url.hash) return;
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+    if (url.host !== location.host || url.pathname !== location.pathname || !url.hash) return;
+    if (url.origin !== location.origin || url.search !== location.search || event.defaultPrevented
+      || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
       || link.hasAttribute('download') || (link.target && link.target !== '_self')) {
-      // La versión actual de anchors no excluye los clics modificados.
+      // Evitar que anchors intercepte navegación nativa o eventos cancelados.
       if (instance) event.stopPropagation();
       return;
     }
     let target: HTMLElement | null;
     try { target = document.getElementById(decodeURIComponent(url.hash.slice(1))); }
-    catch { return; }
-    if (!target || event.defaultPrevented) return;
+    catch { if (instance) event.stopPropagation(); return; }
+    if (!target) { if (instance) event.stopPropagation(); return; }
 
     document.dispatchEvent(new Event('navigation:close-menu'));
     measureHeader();
-    if (root.classList.contains('intro-pending')) return;
+    if (root.classList.contains('intro-pending')) {
+      event.preventDefault();
+      if (instance) event.stopPropagation();
+      return;
+    }
     event.preventDefault();
     destination = target;
+    focusOrigin = document.activeElement;
     if (location.hash !== url.hash) history.pushState(null, '', url.hash);
     if (!instance) {
       target.scrollIntoView({ behavior: 'instant', block: 'start' });
       focusDestination();
     }
   }, { signal: events.signal });
+
+  function restoreHistory() {
+    destination = undefined;
+    // Detener el destino anterior para no sobrescribir Atrás/Adelante.
+    if (instance) { instance.stop(); instance.start(); syncIntro(); }
+    if (!location.hash || root.classList.contains('intro-pending')) return;
+    let target: HTMLElement | null;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); }
+    catch { return; }
+    if (!target) return;
+    if (instance) instance.scrollTo(target, { immediate: true });
+    else target.scrollIntoView({ behavior: 'instant', block: 'start' });
+  }
+  window.addEventListener('popstate', restoreHistory, { signal: events.signal });
+  window.addEventListener('hashchange', restoreHistory, { signal: events.signal });
 
   configure();
   motion.addEventListener('change', configure, { signal: events.signal });
@@ -113,6 +150,8 @@ export function initializeSmoothScroll() {
     sizeObserver.disconnect();
     introObserver.disconnect();
     destroyInstance();
+    temporaryFocus.forEach((target) => target.removeAttribute('tabindex'));
+    temporaryFocus.clear();
     root.style.removeProperty('--anchor-offset');
     cleanup = undefined;
   };
