@@ -18,7 +18,7 @@ export const experiences = [
     id: "juan-chupe-granizados",
     company: "Juan Chupe Granizados",
     initials: "JC",
-    role: "Desarrollador Full Stack freelance",
+    role: "Desarrollador Full Stack",
     start: "2026-02",
     startLabel: "Feb 2026",
     endLabel: "Sep 2026",
