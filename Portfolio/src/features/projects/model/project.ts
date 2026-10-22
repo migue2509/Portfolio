@@ -19,6 +19,7 @@ export interface Project {
   cover: ProjectImage;
   gallery: readonly ProjectImage[];
   repositoryUrl?: string;
+  frontendRepositoryUrl?: string;
   liveUrl?: string;
   category?: string;
   role?: string;

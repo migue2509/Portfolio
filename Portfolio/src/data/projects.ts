@@ -13,7 +13,8 @@ export const projects = [
   {
     slug: "tu-cancha",
     ...tuCanchaContent,
-    repositoryUrl: "https://github.com/DilsiaLamadridTorres/APP_TuCancha",
+    repositoryUrl: "https://github.com/DilsiaLamadridTorres/TuCanchaBackend",
+    frontendRepositoryUrl: "https://github.com/DilsiaLamadridTorres/APP_TuCancha",
     liveUrl: "https://dilsialamadridtorres.github.io/APP_TuCancha/",
     title: "Tu Cancha",
     team: "Proyecto en Equipo",

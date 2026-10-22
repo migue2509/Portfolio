@@ -71,10 +71,15 @@ const details = [
               {project.team && <div class="field"><dt>Equipo</dt><dd>{project.team}</dd></div>}
             </dl>
             <div class="info-actions">
-            {project.repositoryUrl ? <a class="code grain-surface" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+            {project.repositoryUrl && <a class="code grain-surface" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
               <img src={githubMark.src} width="16" height="16" alt="" />
-              Ver código <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
-            </a> : <button class="code grain-surface" type="button" disabled title="Enlace al repositorio pendiente">
+              {project.frontendRepositoryUrl ? "Backend" : "Ver código"} <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+            </a>}
+            {project.frontendRepositoryUrl && <a class="code grain-surface" href={project.frontendRepositoryUrl} target="_blank" rel="noopener noreferrer">
+              <img src={githubMark.src} width="16" height="16" alt="" />
+              Frontend <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+            </a>}
+            {!project.repositoryUrl && !project.frontendRepositoryUrl && <button class="code grain-surface" type="button" disabled title="Enlace al repositorio pendiente">
               <img src={githubMark.src} width="16" height="16" alt="" />
               Ver código <span aria-hidden="true">↗</span><span class="sr-only"> (enlace pendiente)</span>
             </button>}
@@ -145,7 +150,11 @@ const details = [
           <div class="project-links">
             {project.repositoryUrl && <a class="code grain-surface" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
               <img src={githubMark.src} width="16" height="16" alt="" />
-              GitHub <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+              {project.frontendRepositoryUrl ? "Backend" : "GitHub"} <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
+            </a>}
+            {project.frontendRepositoryUrl && <a class="code grain-surface" href={project.frontendRepositoryUrl} target="_blank" rel="noopener noreferrer">
+              <img src={githubMark.src} width="16" height="16" alt="" />
+              Frontend <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
             </a>}
             {project.liveUrl && <a class="code grain-surface" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
               Demo <span aria-hidden="true">↗</span><span class="sr-only"> (abre en otra pestaña)</span>
