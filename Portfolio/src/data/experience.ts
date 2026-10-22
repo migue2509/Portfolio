@@ -15,21 +15,6 @@ export interface Experience {
 // Fuente: public/documents/miguel-ospina-cv.pdf, experiencia laboral.
 export const experiences = [
   {
-    id: "sm-tream-life",
-    company: "SM Tream Life",
-    initials: "SM",
-    role: "Desarrollador Full Stack freelance",
-    start: "2026-09",
-    startLabel: "Sep 2026",
-    endLabel: "En Desarrollo",
-    year: "2026",
-    technologies: ["Figma", "Scrum", "Git", "GitHub", "Java", "Spring Boot", "PostgreSQL", "HTML", "CSS", "JavaScript"],
-    impact: [
-      "Levantamiento de requerimientos y diseño en Figma de una aplicación para gestionar y dar seguimiento a los asesorados de un entrenador personal.",
-      "Desarrollo previsto en Java, Spring Boot, PostgreSQL, HTML, CSS y JavaScript.",
-    ],
-  },
-  {
     id: "juan-chupe-granizados",
     company: "Juan Chupe Granizados",
     initials: "JC",
