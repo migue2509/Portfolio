@@ -39,7 +39,7 @@ export const projects = [
     status: "Completado",
     summary: "Sistema ERP para Juan Chupe Granizados.",
     category: "ERP",
-    role: "Desarrollador Full Stack freelance",
+    role: "Desarrollador Full Stack",
     client: "Juan Chupe Granizados",
     tags: ["ERP", "Full Stack"],
     // Información documentada en la experiencia del CV.
