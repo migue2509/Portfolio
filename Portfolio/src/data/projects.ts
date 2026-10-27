@@ -42,7 +42,7 @@ export const projects = [
     category: "ERP",
     role: "Desarrollador Full Stack",
     client: "Juan Chupe Granizados",
-    tags: ["ERP", "Full Stack"],
+    tags: ["ERP", "AI generativa"],
     // Información documentada en la experiencia del CV.
     tools: ["Python", "Django REST Framework", "PostgreSQL", "React", "Tailwind CSS", "Git", "GitHub"],
     technologies: [],
